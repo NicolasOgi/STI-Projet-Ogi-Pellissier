@@ -2,7 +2,7 @@
 
 Auteurs : Nicolas Ogi, Rebecca Tavaearai
 
-Date : 04.12.2021
+Date : 08.12.2021
 
 [TOC]
 
@@ -63,15 +63,77 @@ Comme l'application est exécutée au sein d'une entreprise, on estime que le r�
 
 ## Identification des sources de menaces
 
+Si l'application Web ne tourne qu'en interne dans l'entreprise et n'est accessible qu'à l'intérieur de celle-ci, il est clair que les sources de menaces principales sont les employés eux-mêmes. Cependant, différentes sources de menaces venant d'un réseau externe existent mais devraient dans un premier temps être capables d'entrer à l'intérieur du réseau de l'entreprise avant de pouvoir attaquer l'application Web, ce qui fait que leurs potentialités est plus faibles. 
+
+
+
+**Employé mécontent** :
+
+- Motivation : Revanche, sabotage, divulgation d'informations sensibles sur l'entreprise, modification d'informations
+- Cible : Base de données contenant les noms des utilisateurs et leurs messages (en y accédant directement ou via les mailboxes des autres employés)
+- Potentialité : moyenne
+
+
+
+**Employé malin** :
+
+- Motivation : Espionner les messages des autres employés, obtenir des droits supplémentaires, faire une blague
+- Cible : Base de données contenant les noms des utilisateurs et leurs messages (en y accédant directement ou via les mailboxes des autres employés), Page de gestion des administrateurs
+- Potentialité : moyenne
+
+
+
+**Hackers, script-kiddies** :
+
+- Motivation : S'amuser, gloire
+- Cible : N'importe quel élément / actif
+- Potentialité : faible
+
+
+
+**Cybercrime (spam, maliciels)** :
+
+- Motivation : Financières
+
+- Cible : Vol de credentials des employés, spam des employés, modification d'informations, phishing, revente d'informations
+
+- Potentialité : faible
+
+  
+
+**Concurrent** :
+
+- Motivation : Espionnage industriel
+- Cible : Messages échangés entre les employés
+- Potentialité : faible
+
 
 
 ## Identification des scénarios d'attaques
 
 ### Éléments du système attaqué
 
+Les éléments cibles principaux sont les biens identifiés plus haut dans le document, la base de données contenant les informations des utilisateurs et leurs messages ainsi que l'application Web elle-mêmes.
+
 
 
 ### Motivation(s)
+
+Les motivations ont été divisées en deux parties selon la cible.
+
+- **Base de données** : 
+
+  Dans le cas où la base de données est la cible de l'attaque, les motivations vont être de récupérer, modifier ou supprimer les données.
+
+  - Récupération des données afin de les divulguer ou de les revendre
+  - Modification de l'intégrité des données afin de perturber les échanges d'informations entre les employés (chiffrement par un ransomware)
+  - Suppression des données afin de faire perdre du temps à l'entreprise
+
+  
+
+- **Application Web** :
+
+  Dans le cas où l'application Web est la cible de l'attaque, les motivations vont être de la rendre inutilisable (DDoS) ou d'usurper l'identité d'un administrateur afin de tromper les employés.
 
 
 
