@@ -139,7 +139,32 @@ Les motivations ont été divisées en deux parties selon la cible.
 
 ### Scénario(s) d'attaque
 
+1. Contourner le système d'autentification (login)
+   Mot de passe faible, facilement trouvable (brute force)
+      - Politique de mot de passe
+      - Empêcher le brute force en limitant le nombre de tentatives
+      - Hacher les mots de passe dans la db avec (P)KDFs (Argon2) 
+      - Attention aux message d'erreur trop verbeux
+      - HTTP au lieu d’HTTPS (MITM)
+      - Transmission GET au lieu de POST
+      - Ne pas mettre les credential dans les Cookie
+      - Failles dans le mécanisme qui invalide l'authentification, par exemple une mauvaise gestion des exceptions.
 
+   Contourner le formulaire (mauvaise validation des inputs)
+   
+2. Contourner le système d'autorisation
+   Accéder à des pages sans les droits nécessaires (URL)
+      - Vérifier que toutes les pages ont des contrôles
+      - Vérifier que les contrôles soient bien fait
+   
+4. Injection SQL
+   Lire ou écrire dans la db en injectant des commandes sql
+      - Valider toutes les commandes sql
+      - Attention au filtrage d'input
+      
+6. Cross site scripting
+
+8. Attaque sur le serveur d'application
 
 ### STRIDE
 
