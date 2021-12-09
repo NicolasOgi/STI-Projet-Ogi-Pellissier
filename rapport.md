@@ -2,7 +2,7 @@
 
 Auteurs : Nicolas Ogi, Rebecca Tavaearai
 
-Date : 08.12.2021
+Date : 09.12.2021
 
 [TOC]
 
@@ -46,7 +46,7 @@ Comme l'application est exécutée au sein d'une entreprise, on estime que le r�
 
 ### DFD
 
-![dfd](figures/DFD.png)
+<img src="figures/DFD.png" alt="dfd"  />
 
 ### Identification des biens
 
@@ -63,7 +63,7 @@ Comme l'application est exécutée au sein d'une entreprise, on estime que le r�
 
 ## Identification des sources de menaces
 
-Si l'application Web ne tourne qu'en interne dans l'entreprise et n'est accessible qu'à l'intérieur de celle-ci, il est clair que les sources de menaces principales sont les employés eux-mêmes. Cependant, différentes sources de menaces venant d'un réseau externe existent mais devraient dans un premier temps être capables d'entrer à l'intérieur du réseau de l'entreprise avant de pouvoir attaquer l'application Web, ce qui fait que leurs potentialités est plus faibles. 
+Si l'application Web ne tourne qu'en interne dans l'entreprise et n'est accessible qu'à l'intérieur de celle-ci, il est clair que les sources de menaces principales sont les employés eux-mêmes. Cependant, différentes sources de menaces venant d'un réseau externe existent mais devraient dans un premier temps être capables d'entrer à l'intérieur du réseau de l'entreprise et éventuellement compromettre la machine d'un employé avant de pouvoir attaquer l'application Web, ce qui fait que leurs potentialités est plus faibles.
 
 
 
@@ -127,17 +127,19 @@ Les motivations ont été divisées en deux parties selon la cible.
 
   - Récupération des données afin de les divulguer ou de les revendre
   - Modification de l'intégrité des données afin de perturber les échanges d'informations entre les employés (chiffrement par un ransomware)
-  - Suppression des données afin de faire perdre du temps à l'entreprise
+  - Suppression des données afin de faire perdre du temps et de l'argent à l'entreprise
 
   
 
 - **Application Web** :
 
-  Dans le cas où l'application Web est la cible de l'attaque, les motivations vont être de la rendre inutilisable (DDoS) ou d'usurper l'identité d'un administrateur afin de tromper les employés.
+  Dans le cas où l'application Web est la cible de l'attaque, les motivations vont être de la rendre inutilisable (DDoS) ou d'usurper l'identité d'un administrateur afin de tromper les employés. Elles pourraient également être la revente ou la divulgation de données sensibles contenues dans les mailboxes des employés dans le cas ou l'attaquant n'a pas réussi à accéder à la base de données directement.
 
 
 
 ### Scénario(s) d'attaque
+
+
 
 
 
