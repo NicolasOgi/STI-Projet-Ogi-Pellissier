@@ -141,13 +141,7 @@ Les motivations ont été divisées en deux parties selon la cible.
 
 1. Contourner le système d'autentification (login)
    Mot de passe faible, facilement trouvable (brute force)
-      - Politique de mot de passe
-      - Empêcher le brute force en limitant le nombre de tentatives
-      - Hacher les mots de passe dans la db avec (P)KDFs (Argon2) 
-      - Attention aux message d'erreur trop verbeux
-      - HTTP au lieu d’HTTPS (MITM)
-      - Transmission GET au lieu de POST
-      - Ne pas mettre les credential dans les Cookie
+
       - Failles dans le mécanisme qui invalide l'authentification, par exemple une mauvaise gestion des exceptions.
 
    Contourner le formulaire (mauvaise validation des inputs)
@@ -170,6 +164,35 @@ Les motivations ont été divisées en deux parties selon la cible.
 
 ### STRIDE
 
+#### Spoofing 
+Exemple: s'authentifer à l'application en utilisant un mot de passe volé
+Contre mesure:
+  - politique de mot de passe
+  - limiter le nombre de tentative de login
+  - hacher les mots de passe dans la db avec (P)KDFs (Argon2)
+  - ne pas mettre des messages d'erreur trop verbeux
+  - utiliser POST plutôt que GET
+  - utiliser https plutôt que http
+
+#### Tampering 
+Exemple: utiliser une injéction SQL pour modifier, supprimer ou récupérer des données dans la base de données
+Contre mesure: use of prepared statements, escaping user input 
+
+#### Repudiation 
+Exemple: Modify a user shipping address on an e-commerce 
+Contre mesure: request address confirmation and additional authentication to confirm 
+
+#### Information disclosure 
+Exemple: intercept clear-text browser traffic in a public wifi 
+Contre mesure: traffic encryption 
+
+#### Denial of service 
+Exemple: allocate session memory based on user provided values 
+Contre mesure: validate size before allocating (input validation) 
+
+#### Elevation of privileges 
+Exemple: copy/paste an administrative URL within a normal user session 
+Contre mesure: authorization mechanism
 
 
 ## Identification des contre-mesures
