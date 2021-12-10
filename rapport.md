@@ -155,7 +155,7 @@ Les motivations ont été divisées en deux parties selon la cible.
    Lire ou écrire dans la db en injectant des commandes sql
       - Valider toutes les commandes sql
       - Attention au filtrage d'input
-      
+   
 6. Cross site scripting
 
 8. Attaque sur le serveur d'application
