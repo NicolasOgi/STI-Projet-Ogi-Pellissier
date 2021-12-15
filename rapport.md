@@ -2,7 +2,7 @@
 
 Auteurs : Nicolas Ogi, Rebecca Tavaearai
 
-Date : 09.12.2021
+Date : 15.12.2021
 
 [TOC]
 
@@ -57,7 +57,7 @@ Comme l'application est exécutée au sein d'une entreprise, on estime que le r�
 
 ### Définition du périmètre de sécurisation
 
-???
+Comme l'application ne serait accessible qu'en interne, le serveur sur laquelle elle s'exécute ne se situe pas dans une DMZ mais directement dans le réseau privé de l'entreprise. Ce qui veut dire que les données n'ont pas de périmètre de sécurité à franchir entre des zones de confiances différentes. Nous supposons que les fonctions d'administration doivent rester accessibles peu importe où l'on se trouve dans le réseau donc pas de limitations à certains VLAN ou plages d'IP.
 
 
 
@@ -75,7 +75,7 @@ Si l'application Web ne tourne qu'en interne dans l'entreprise et n'est accessib
 
 
 
-**Employé malin** :
+**Employé malin ou curieux** :
 
 - Motivation : Espionner les messages des autres employés, obtenir des droits supplémentaires, faire une blague
 - Cible : Base de données contenant les noms des utilisateurs et leurs messages (en y accédant directement ou via les mailboxes des autres employés), Page de gestion des administrateurs
@@ -137,28 +137,59 @@ Les motivations ont été divisées en deux parties selon la cible.
 
 
 
-### Scénario(s) d'attaque
+### Scénarios d'attaque
 
-1. Contourner le système d'autentification (login)
-   Mot de passe faible, facilement trouvable (brute force)
+#### **1. Contourner le système d'autentification afin d'avoir accès à la mailbox d'un employé** 
 
-      - Failles dans le mécanisme qui invalide l'authentification, par exemple une mauvaise gestion des exceptions.
+- **Impact sur l'entreprise** : élevé (perte de confidentialité, d'intégrité et d'authenticité)
 
-   Contourner le formulaire (mauvaise validation des inputs)
-   
-2. Contourner le système d'autorisation
+- **Source de la menace** : employé mécontent ou malin
+
+- **Motivation** : sabotage, divulgation d'information, curiosité
+
+- **Actif(s) visé(s)** : mailboxes d'autres employés
+
+- **Scénarios d'attaque** :
+  - Comme aucune politique de mot de passe n'a été définie, il peut exister des mots de passe faibles et donc facilement trouvables. De plus, comme aucun moyen ne limite le nombre de tentatives infructueuses, un employé peut sans limite brute-forcer les credentials d'un autre employé et finalement réussir à se connecter à son compte. Pire, si le compte craqué appartient à un administrateur, l'attaquant pourrait avoir accès à la gestion des utilisateurs afin d'en ajouter des nouveaux, de supprimer ou modifier des existants.
+
+- **Contrôles** :
+  - Définir une politique de mots de passe forte (min. 8 caractères, min. 1 chiffre, min. 1 minuscule, min. 1 majuscule, min. 1 caractère spécial)
+  - Limiter le nombre de tentatives infructueuses avant de désactiver le compte mais **attention** un attaquant pourrait profiter de cette contre-mesure pour bloquer les comptes des employés, ce qui ferait perdre du temps à l'entreprise pour réactiver les comptes
+  - Limiter la vitesse des tentatives après un certains nombres de tentatives infructueuses
+  - Bloquer l'IP de la source après plusieurs tentatives infructueuses
+
+   - Failles dans le mécanisme qui invalide l'authentification, par exemple une mauvaise gestion des exceptions. Dans le cas de notre appli ?
+
+     
+
+#### 2. Contourner le système d'autorisation afin d'accéder aux messages des autres employés
+
+- **Impact sur l'entreprise** : moyen (perte de confidentialité)
+
+- **Source de la menace** : employé malin ou curieux
+
+- **Motivation** : curiosité
+
+- **Actif(s) visé(s)** : messages envoyés par d'autres employés
+
+- **Scénarios d'attaque** :
+  - Une fois connecté, un employé peut très facilement manipuler les paramètres de l'URL afin d'accéder à des messages contenus dans la base de données qui ne lui appartiennent pas. Ainsi, il pourrait obtenir des informations confidentielles au sein de l'entreprise qui ne lui sont pas destinées.
+
+- **Contrôles** :
+  - Mettre en place un système d'autorisation qui empêche les employés d'accéder aux messages dont ils ne sont pas les destinataires.
+
+Contourner le formulaire (mauvaise validation des inputs)
+
+1. Contourner le système d'autorisation
    Accéder à des pages sans les droits nécessaires (URL)
       - Vérifier que toutes les pages ont des contrôles
       - Vérifier que les contrôles soient bien fait
-   
-4. Injection SQL
+2. Injection SQL
    Lire ou écrire dans la db en injectant des commandes sql
       - Valider toutes les commandes sql
       - Attention au filtrage d'input
-   
-6. Cross site scripting
-
-8. Attaque sur le serveur d'application
+3. Cross site scripting
+4. Attaque sur le serveur d'application
 
 
 
