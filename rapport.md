@@ -2,7 +2,7 @@
 
 Auteurs : Nicolas Ogi, Rebecca Tavaearai
 
-Date : 16.12.2021
+Date : 22.12.2021
 
 [TOC]
 
@@ -146,50 +146,157 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 #### 1. Contourner le système d'autentification afin d'avoir accès à la mailbox d'un employé 
 
 - **Impact sur l'entreprise** : élevé (perte de confidentialité, d'intégrité et d'authenticité)
+
 - **Sources de la menace** : employé mécontent ou malin
+
 - **Motivation** : sabotage, divulgation d'information, curiosité
+
 - **Actif(s) visé(s)** : mailboxes d'autres employés
-- **Scénarios d'attaque** :
-  - Comme aucune politique de mot de passe n'a été définie, il peut exister des mots de passe faibles et donc facilement trouvables. De plus, comme aucun moyen ne limite le nombre de tentatives infructueuses, un employé peut sans limite brute-forcer les credentials d'un autre employé et finalement réussir à se connecter à son compte. Pire, si le compte craqué appartient à un administrateur, l'attaquant pourrait avoir accès à la gestion des utilisateurs afin d'en ajouter des nouveaux, de supprimer ou modifier des existants.
+
+- **Scénario d'attaque** :
+  
+  Comme aucune politique de mot de passe n'a été définie, il peut exister des mots de passe faibles et donc facilement trouvables. De plus, comme aucun moyen ne limite le nombre de tentatives infructueuses, un employé peut sans limite brute-forcer les credentials d'un autre employé et finalement réussir à se connecter à son compte. Pire, si le compte craqué appartient à un administrateur, l'attaquant pourrait avoir accès à la gestion des utilisateurs afin d'en ajouter des nouveaux, de supprimer ou modifier des existants.
+  
 - **Contrôles** :
   - Définir une politique de mots de passe forte (min. 8 caractères, min. 1 chiffre, min. 1 minuscule, min. 1 majuscule, min. 1 caractère spécial)
   - Limiter le nombre de tentatives infructueuses avant de désactiver le compte mais **attention** un attaquant pourrait profiter de cette contre-mesure pour bloquer les comptes des employés, ce qui ferait perdre du temps à l'entreprise pour réactiver les comptes
   - Limiter la vitesse des tentatives après un certains nombres de tentatives infructueuses
   - Bloquer l'IP de la source après plusieurs tentatives infructueuses
+  
+- **STRIDE** :
+
+  Dans ce scénario, nous pouvons identifier les menaces suivantes :
+
+  - Spoofing
+  - Information disclosure
 
 #### 2. Contourner le système d'autorisation afin d'accéder aux messages des autres employés
 
 - **Impact sur l'entreprise** : moyen (perte de confidentialité)
+
 - **Source de la menace** : employé malin ou curieux
+
 - **Motivation** : curiosité
+
 - **Actif(s) visé(s)** : messages envoyés par d'autres employés
-- **Scénarios d'attaque** :
-  - Une fois connecté, un employé peut très facilement manipuler les paramètres de l'URL afin d'accéder à des messages contenus dans la base de données qui ne lui appartiennent pas. Ainsi, il pourrait obtenir des informations confidentielles au sein de l'entreprise qui ne lui sont pas destinées.
+
+- **Scénario d'attaque** :
+  
+  Une fois connecté, un employé peut très facilement manipuler les paramètres de l'URL afin d'accéder à des messages contenus dans la base de données qui ne lui appartiennent pas. Ainsi, il pourrait obtenir des informations confidentielles au sein de l'entreprise qui ne lui sont pas destinées.
+  
 - **Contrôles** :
   - Mettre en place un système d'autorisation qui empêche les employés d'accéder aux messages dont ils ne sont pas les destinataires.
+  
+- **STRIDE** :
+
+  Dans ce scénario, nous pouvons identifier les menaces suivantes :
+
+  - Information disclosure
 
 #### 3. Récupération des données échangées entre les clients et le serveur en sniffant le trafic sur le réseau interne
 
 - **Impact sur l'entreprise** : élevé (perte de confidentialité, d'intégrité et d'authenticité)
+
 - **Source de la menace** : employé mécontent, malin ou curieux
-- **Motivation** : sabotage, divulgation d'information, curiosité, usurpation d'identité, curiosité
+
+- **Motivation** : sabotage, divulgation d'information, curiosité, usurpation d'identité
+
 - **Actif(s) visé(s)** : toutes données transitant entre le serveur et les clients
-- **Scénarios d'attaque** :
-  - Comme l'application Web utilise HTTP pour échanger les données entre le client et le serveur, il est tout à fait possible de sniffer le réseau afin de récupérer les credentials d'un employé, récupérer des messages envoyés à un autre employé. Un attaquant pourrait récupérer les credentials d'un administrateur, usurper son identité, accéder aux fonctionnalités supplémentaires (gestion admin). De manière plus active, il pourrait à l'aide d'un proxy d'interception, modifier la requête envoyée au serveur afin de porter atteinte à l'intégrité d'un message envoyé à un autre employé par exemple.
+
+- **Scénario d'attaque** :
+  
+  Comme l'application Web utilise HTTP pour échanger les données entre le client et le serveur, il est tout à fait possible de sniffer le réseau afin de récupérer les credentials d'un employé ou récupérer des messages envoyés à un autre employé. Un attaquant pourrait récupérer les credentials d'un administrateur, usurper son identité, accéder aux fonctionnalités supplémentaires (gestion admin). De manière plus active, il pourrait à l'aide d'un proxy d'interception, modifier la requête envoyée au serveur afin de porter atteinte à l'intégrité d'un message envoyé à un autre employé (en modifiant l'expéditeur d'un message par ex.). **A VERIFIER** : Avec ce même proxy, il pourrait également passer Administrateur en modifiant la requête lui permettant de changer son mot de passe.
+  
 - **Contrôles** :
-  - Bien que cette contre-mesure ne sera pas mise en place dans le cadre de ce projet, la solution la plus efficace à ce problème de sécurité est de passer le serveur en HTTPS afin de tous les messages échangés soient chiffrés pour ainsi assurer la confidentialité, l'intégrité et l'authenticité.
+  - Bien que cette contre-mesure ne sera pas mise en place dans le cadre de ce projet, la solution la plus efficace à ce problème de sécurité est de passer le serveur en HTTPS afin que tous les messages échangés soient chiffrés pour ainsi assurer la confidentialité, l'intégrité et l'authenticité.
+  
+- **STRIDE** :
+
+  Dans ce scénario, nous pouvons identifier les menaces suivantes :
+
+  - Spoofing
+  - Tampering
+  - Repudiation
+  - Information disclosure
+  - Elevation of privilege (**A VERIFIER**)
 
 #### 4. Attaque Cross-Site Scripting
 
+- **Impact sur l'entreprise** :
 
+- **Sources de la menace** : 
+
+- **Motivation** : 
+
+- **Actif(s) visé(s)** : 
+
+- **Scénario d'attaque** :
+
+  
+
+- **Contrôles** :
+
+  - Assainir les inputs utilisateur pour éviter que des balises HTML soient interprétables
+
+  
+
+- **STRIDE** :
+
+  Dans ce scénario, nous pouvons identifier les menaces suivantes :
+
+  
 
 #### 5. Attaque Cross-Site Request Forgery
 
+- **Impact sur l'entreprise** :
 
+- **Sources de la menace** : 
+
+- **Motivation** : 
+
+- **Actif(s) visé(s)** : 
+
+- **Scénario d'attaque** :
+
+  
+
+- **Contrôles** :
+
+  - Utiliser des tokens anti-CSRF dans les formulaires
+
+  
+
+- **STRIDE** :
+
+  Dans ce scénario, nous pouvons identifier les menaces suivantes :
+
+  
 
  #### 6. Injection SQL
 
+- **Impact sur l'entreprise** :
 
+- **Sources de la menace** : 
+
+- **Motivation** : 
+
+- **Actif(s) visé(s)** : 
+
+- **Scénario d'attaque** :
+
+  
+
+- **Contrôles** :
+
+  - Utiliser des prepare statements pour éviter les injections SQL dans les requêtes légitimes
+
+  
+
+- **STRIDE** :
+
+  Dans ce scénario, nous pouvons identifier les menaces suivantes :
+
+  
 
 #### 7. Brute-force de la page de login de la base de données
 
@@ -201,9 +308,9 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
 - **Actif(s) visé(s)** : base de données des utilisateurs et des messages
 
-- **Scénarios d'attaque** :
+- **Scénario d'attaque** :
 
-  - Comme la page de gestion SQLite est accessible si l'on connait le nom de la ressource, un attaquant pourrait dans un premier temps brute-forcer les noms des fichiers accessibles via l'URL à l'aide de différents outils existants (ZAP, DirBuster, Burp Intruder, etc...) et ainsi obtenir l'arborescence du site. Puis, si une politique de mot de passe n'a pas vraiment été définie, il pourrait tenter de brute-forcer les credentials de la DB afin d'y accéder. Si l'accès est obtenu, il s'agit de la vulnérabilité la plus grave identifiée car un attaquant pourrait littéralement avoir accès à toutes les données de l'application et les copier, les supprimer ou les modifier.
+  Comme la page de gestion SQLite est accessible si l'on connait le nom de la ressource, un attaquant pourrait dans un premier temps brute-forcer les noms des fichiers accessibles via l'URL à l'aide de différents outils existants (ZAP, DirBuster, Burp Intruder, etc...) et ainsi obtenir l'arborescence du site. Puis, si une politique de mot de passe n'a pas vraiment été définie, il pourrait tenter de brute-forcer les credentials de la DB afin d'y accéder. Si l'accès est obtenu, il s'agit de la vulnérabilité la plus grave identifiée car un attaquant pourrait littéralement avoir accès à toutes les données de l'application et les copier, les supprimer ou les modifier. Il pourrait même supprimer la base de données entièrement et ainsi rendre l'application indisponible.
 
 - **Contrôles** :
 
@@ -211,55 +318,33 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   - Autoriser l'accès à la ressource que depuis une certaine IP (poste de l'administrateur DB) en modifiant les paramètres du serveur Nginx
   - Chiffrer les données stockées dans la base de données afin que même si elle est dump, aucune donnée n'est lisible sans la clé
 
+- **STRIDE** :
+
+  Dans ce scénario, nous pouvons identifier les menaces suivantes :
+
+  - Spoofing
+  - Tampering
+  - Repudiation
+  - Information disclosure
+  - Denial of service
+  - Elevation of privilege
+
   
-
-Contourner le formulaire (mauvaise validation des inputs)
-
-1. Injection SQL
-   Lire ou écrire dans la db en injectant des commandes sql
-      - Valider toutes les commandes sql
-      - Attention au filtrage d'input
-2. Cross site scripting
-3. Attaque sur le serveur d'application
-
-
-
-### STRIDE
-
-#### Spoofing 
-Exemple: s'authentifer à l'application en utilisant un mot de passe volé
-Contre mesure:
-  - politique de mot de passe
-  - limiter le nombre de tentative de login
-  - hacher les mots de passe dans la db avec (P)KDFs (Argon2)
-  - ne pas mettre des messages d'erreur trop verbeux
-  - utiliser POST plutôt que GET
-  - utiliser https plutôt que http
-
-#### Tampering 
-Exemple: utiliser une injéction SQL pour modifier, supprimer ou récupérer des données dans la base de données
-Contre mesure: use of prepared statements, escaping user input 
-
-#### Repudiation 
-Exemple: Modify a user shipping address on an e-commerce 
-Contre mesure: request address confirmation and additional authentication to confirm 
-
-#### Information disclosure 
-Exemple: intercept clear-text browser traffic in a public wifi 
-Contre mesure: traffic encryption 
-
-#### Denial of service 
-Exemple: allocate session memory based on user provided values 
-Contre mesure: validate size before allocating (input validation) 
-
-#### Elevation of privileges 
-Exemple: copy/paste an administrative URL within a normal user session 
-Contre mesure: authorization mechanism
 
 
 ## Identification des contre-mesures
 
-### En fonction des scénarios d'attaques
+Dans cette partie du rapport, nous listons les contre-mesures mises en place dans l'application par rapport aux différents scénarios d'attaque identifiés, avec des détails plus techniques concernant ce qui a dû être entrepris dans le code PHP :
+
+#### 1. Mise en place d'une politique de mot de passe
+
+#### 2. Vérification du rôle de l'utilisateur lors de l'accès à la base de données
+
+#### 3. Sanitization des inputs utilisateurs
+
+#### 4. Mise en place d'un token anti-CSRF dans les formulaires
+
+#### 5. Préparation des requêtes SQL avant exécution
 
 
 
