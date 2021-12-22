@@ -86,9 +86,15 @@ docker exec -u root sti_project service php5-fpm start # pour PHP
 
 **ATTENTION** : Avant de lancer les commandes Docker ci-dessus, assurez-vous d'avoir bien installé et lancé le Docker Engine sur votre machine.
 
+4. Changer les droits du fichier `/usr/share/nginx` afin que la base de données puisse être modifiée, avec la commande ci-dessous :
+
+```bash
+docker exec -u root sti_project chown www-data /usr/share/nginx
+```
 
 
-4. Accédez à la page de login en tapant `localhost:8080` dans votre navigateur.
+
+5. Accédez à la page de login en tapant `localhost:8080` dans votre navigateur.
 
 
 
