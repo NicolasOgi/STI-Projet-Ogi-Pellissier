@@ -2,7 +2,7 @@
 
 Auteurs : Nicolas Ogi, Rebecca Tavaearai
 
-Date : 22.12.2021
+Date : 23.12.2021
 
 [TOC]
 
@@ -154,21 +154,36 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 - **Actif(s) visé(s)** : mailboxes d'autres employés
 
 - **Scénario d'attaque** :
-  
-  Comme aucune politique de mot de passe n'a été définie, il peut exister des mots de passe faibles et donc facilement trouvables. De plus, comme aucun moyen ne limite le nombre de tentatives infructueuses, un employé peut sans limite brute-forcer les credentials d'un autre employé et finalement réussir à se connecter à son compte. Pire, si le compte craqué appartient à un administrateur, l'attaquant pourrait avoir accès à la gestion des utilisateurs afin d'en ajouter des nouveaux, de supprimer ou modifier des existants.
-  
+
+  Comme aucune politique de mot de passe n'a été définie, il peut exister des mots de passe faibles et donc facilement trouvables. De plus, comme aucun moyen ne limite le nombre de tentatives infructueuses, un employé peut sans limite brute-forcer les credentials d'un autre employé et finalement réussir à se connecter à son compte. Pire, si le compte craqué appartient à un administrateur, l'attaquant pourrait avoir accès à la gestion des utilisateurs afin d'en ajouter des nouveaux et de supprimer ou modifier des existants.
+
+  En plus de cela, bien que l'application renvoie un message d'erreur générique lorsque le nom d'utilisateur ou le mot de passe est incorrect, il est possible de savoir si le nom d'utilisateur existe à l'aide d'une timing attack, ce qui limite le nombre de combinaisons lorsque l'on trouve un nom d'utilisateur existant dans la DB. L'attaquant n'a plus qu'à brute-forcer les mots de passe. Voici les résultats obtenus lors du chargement de la page de login avec les deux cas ci-dessous :
+
+  **Le nom d'utilisateur existe** : 
+
+  ![image-20211223131736044](figures/image-20211223131736044.png)
+
+  Prend plus de temps car le système vérifie le nom d'utilisateur puis doit vérifier le mot de passe avant de retourner une réponse.
+
+  **Le nom d'utilisateur n'existe pas** :
+
+  ![image-20211223131843220](figures/image-20211223131843220.png)
+
+  Ici, le système ne vérifie que le nom d'utilisateur et comme il n'existe pas, la réponse est retournée plus vite.
+
 - **Contrôles** :
   - Définir une politique de mots de passe forte (min. 8 caractères, min. 1 chiffre, min. 1 minuscule, min. 1 majuscule, min. 1 caractère spécial)
   - Limiter le nombre de tentatives infructueuses avant de désactiver le compte mais **attention** un attaquant pourrait profiter de cette contre-mesure pour bloquer les comptes des employés, ce qui ferait perdre du temps à l'entreprise pour réactiver les comptes
   - Limiter la vitesse des tentatives après un certains nombres de tentatives infructueuses
   - Bloquer l'IP de la source après plusieurs tentatives infructueuses
+  - Ajouter volontairement du code pour garder un temps constant afin d'éviter les timing attacks
   
 - **STRIDE** :
 
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
   - Spoofing
-  - Tempering
+  - Tampering
   - Information disclosure
 
 #### 2. Contourner le système d'autorisation afin d'accéder aux messages des autres employés
@@ -267,7 +282,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
   - Spoofing
-  - Tempering
+  - Tampering
   - Information Disclosure
   - Elevation of privilege
   
@@ -329,7 +344,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
   - Spoofing
-  - Tempering
+  - Tampering
   - Information disclosure
   - Elevation of privilege
 
