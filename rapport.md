@@ -183,8 +183,12 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
   - Spoofing
+  
   - Tampering
+  
   - Information disclosure
+  
+    
 
 #### 2. Contourner le système d'autorisation afin d'accéder aux messages des autres employés
 
@@ -208,6 +212,8 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
   - Information disclosure
+  
+    
 
 #### 3. Récupération des données échangées entre les clients et le serveur en sniffant le trafic sur le réseau interne
 
@@ -231,9 +237,14 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
   - Spoofing
+  
   - Tampering
+  
   - Repudiation
+  
   - Information disclosure
+  
+    
 
 #### 4. Attaque Cross-Site Scripting
 
