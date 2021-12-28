@@ -1,6 +1,7 @@
 <?php
 /**
  * Fonction permettant d'écrire un nouveau message
+ * @throws Exception
  */
 function new_msg(){
 
@@ -28,11 +29,16 @@ function new_msg(){
         }
     }
     else {
-
         // si l'utilisateur répond à un mail, on récupère les infos de celui-ci afin de pouvoir les afficher dans la vue
         // message.php grâce à la variable $mail
         if (isset($_GET['reply'])) {
+
             $mail = getMailDetails($_GET['reply'])->fetch();
+
+            // une exception est lancée si l'utilisateur connecté n'est pas le destinataire du message
+            if ($mail['recipient'] != $_SESSION["no"]) {
+                throw new Exception('You do not have the rights to reply to this message');
+            }
         }
         require 'view/message.php';
     }

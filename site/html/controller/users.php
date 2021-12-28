@@ -139,7 +139,7 @@ function addUser(){
 function deleteUser(){
 
     // si l'utilisateur n'est pas un administrateur
-    if($_SESSION['role'] != ROLE_ADMIN ){
+    if($_SESSION['role'] != ROLE_ADMIN){
         throw new Exception('You do not have the rights to access this page');
     }
 
