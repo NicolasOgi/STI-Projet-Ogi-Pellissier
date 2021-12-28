@@ -4,28 +4,40 @@
  */
 function login() {
     // récupération des variables POST
-    if (isset($_POST['fLogin']) && isset($_POST['fPasswd'])) {
+    if (isset($_POST['fLogin']) && isset($_POST['fPasswd']) && !empty($_POST['g-recaptcha-response'])) {
         try {
 
-            // vérification des credentials, si la fonction checkLogin retourne qqch alors ils sont valides
-            $infoUser = checkLogin($_POST);
-            if ($infoUser) {
-                // initialise les variables de session nécessaires pour être identifié sur le site avec son compte
-                $_SESSION["isConnected"] = true;
-                $_SESSION["no"] = $infoUser['no'];
-                $_SESSION['username'] = $infoUser['username'];
-                $_SESSION['valid'] = $infoUser['valid'];
-                $_SESSION['role'] = $infoUser['role'];
-                $_SESSION['message'] = "";
+            // vérification du CAPTCHA
+            $secret = '6Le6JdQdAAAAAHtDLuOOdbXJPz66I6nyLkqCy_eY';
+            $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
+            $responseData = json_decode($verifyResponse);
 
-                // si le compte est activé, l'utilisateur est redirigé dans la mailbox
-                if($_SESSION['valid'] == 1) {
-                    @header("location: index.php?action=home");
+            // Si le CAPTCHA est valide alors les credentials sont vérifiés
+            if($responseData->success) {
+                // vérification des credentials, si la fonction checkLogin retourne qqch alors ils sont valides
+                $infoUser = checkLogin($_POST);
+                if ($infoUser) {
+                    // initialise les variables de session nécessaires pour être identifié sur le site avec son compte
+                    $_SESSION["isConnected"] = true;
+                    $_SESSION["no"] = $infoUser['no'];
+                    $_SESSION['username'] = $infoUser['username'];
+                    $_SESSION['valid'] = $infoUser['valid'];
+                    $_SESSION['role'] = $infoUser['role'];
+                    $_SESSION['message'] = "";
+
+                    // si le compte est activé, l'utilisateur est redirigé dans la mailbox
+                    if($_SESSION['valid'] == 1) {
+                        @header("location: index.php?action=home");
+                    }
+                    else { // sinon la page de login s'affiche avec un message d'erreur
+                        $_SESSION['message'] = "This user is disabled";
+                        require "view/login.php";
+                    }
                 }
-                else { // sinon la page de login s'affiche avec un message d'erreur
-                    $_SESSION['message'] = "This user is disabled";
-                    require "view/login.php";
-                }
+            }
+            else { // Sinon la page de login est rechargée et un message d'erreur est affiché
+                $_SESSION['message'] = "CAPTCHA verification failed, try again";
+                require "view/login.php";
             }
 
         } catch (Exception $e) {

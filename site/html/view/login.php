@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="css/login.css">
     <meta charset="ISO-8859-1">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 <?php require 'view/components/info_to_user.php'?>
@@ -27,6 +28,8 @@
                                     <input name="fPasswd" type="password" class="form-control" id="floatingPassword" placeholder="Password">
                                     <label for="floatingPassword">Password</label>
                                 </div>
+                                <div class="g-recaptcha" data-sitekey="6Le6JdQdAAAAALieOR5e8PGiZthlVSS9qCMklpp2"></div>
+                                <br>
                                 <div class="d-grid">
                                     <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit">Sign in</button>
                                 </div>

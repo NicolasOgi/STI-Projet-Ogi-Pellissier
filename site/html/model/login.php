@@ -14,10 +14,12 @@ function checkLogin($postArray)
 
     // si le résultat de la fonction est vide, alors l'utilisateur n'existe pas
     if (empty($results['username'])) {
-        $_SESSION['message'] = "The user does not exist or the password is incorrect";
-        require 'view/login.php';
+        // Faux hash pour que la vérification du mot de passe soit quand même effectuée afin d'éviter les timing attacks
+        $hash = '$2y$10$ketJpZi7uOnjXX/jaRolFeqru6YEmpbSv2krw2nK0/Mm/PAcpAZp6';
     }
-    $hash = $results['password'];
+    else {
+        $hash = $results['password'];
+    }
 
     // vérification du mot de passe
     if (password_verify($passwdPost, $hash)) {
