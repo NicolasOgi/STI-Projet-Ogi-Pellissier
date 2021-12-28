@@ -177,7 +177,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   - Limiter le débit des tentatives après un certains nombres de tentatives infructueuses
   - Bloquer l'IP de la source après plusieurs tentatives infructueuses
   - Mettre en place un CAPTCHA
-  - Ajouter volontairement du code pour garder un temps constant afin d'éviter les timing attacks
+  - Modifier le flux du login pour garder un temps constant afin d'éviter les timing attacks
   
 - **STRIDE** :
 

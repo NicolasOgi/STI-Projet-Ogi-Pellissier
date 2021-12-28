@@ -46,7 +46,6 @@ function changeUserDetails() {
         throw new Exception('You do not have the rights to modify this user');
     }
 
-
     if (empty($_POST)){
         // récupération des informations de l'utilisateur
         $user = getUserByID($userNo)->fetch();
@@ -63,14 +62,25 @@ function changeUserDetails() {
     }
 
     // si l'on veut définir un nouveau mot de passe
-    if(isset($_POST['password']) && $_POST['password'] != ""){
-        // appel de la fonction permettant de faire la modification dans la DB
-        updatePassword($userNo, $_POST['password']);
+    if(isset($_POST['password']) && !empty($_POST['password'])){
 
-        // redirection de l'utilisateur sur la page de login une fois la modification effectuée
-        if($userNo == $_SESSION['no']){
-            $_SESSION['message'] = "Your password has been updated. Please log in again";
-            logout();
+        if (passwordMatchesSecurityPolicy($_POST['password'])) {
+
+            // appel de la fonction permettant de faire la modification dans la DB
+            updatePassword($userNo, $_POST['password']);
+
+            // redirection de l'utilisateur sur la page de login une fois la modification effectuée
+            if($userNo == $_SESSION['no']){
+                $_SESSION['message'] = "Your password has been updated. Please log in again";
+                logout();
+                exit();
+            }
+        }
+        else {
+            $_SESSION['message'] = "The password does not match the security policy, "
+                . "it should be at least 8 char long, should contain at least one uppercase char, one lowercase char, "
+                . "one digit and one special character";
+            administration();
             exit();
         }
     }
@@ -103,10 +113,17 @@ function addUser(){
     }
     else {
         try {
-            $validity = isset($_POST['valid']) ? "1 " : "0 ";
-            // appel de la fonction permettant de créer le nouvel utilisateur dans la DB
-            insertUser($_POST['username'], $_POST["password"], $validity, $_POST["role"]);
-            $_SESSION['message'] = "The account has been created";
+            if (passwordMatchesSecurityPolicy($_POST["password"])) {
+                $validity = isset($_POST['valid']) ? "1 " : "0 ";
+                // appel de la fonction permettant de créer le nouvel utilisateur dans la DB
+                insertUser($_POST['username'], $_POST["password"], $validity, $_POST["role"]);
+                $_SESSION['message'] = "The account has been created";
+            }
+            else {
+                $_SESSION['message'] = "The password does not match the security policy, "
+                    . "it should be at least 8 char long, should contain at least one uppercase char, one lowercase char, "
+                    . "one digit and one special character";
+            }
 
         } catch(Exception $e){
             $_SESSION['message'] = "The account couldn't be created";
@@ -145,5 +162,15 @@ function deleteUser(){
         $_SESSION['message'] = "This user does not exist";
     }
     administration();
+}
+
+/**
+ * Fonction permettant de vérifier si un mot de passe correspond à la politique de sécurité
+ * @param $password  mot de passe à vérifier
+ * @return false|true
+ */
+function passwordMatchesSecurityPolicy($password) {
+    // min. 8 caractères, min. 1 chiffre,  min. 1 majuscule, min. 1 minuscule, min. 1 caractère spécial selon la liste
+    return preg_match("/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[0-9A-Za-z!?()<>+&=~^¦|¬;,.:_@#€£$%]{8,}$/", $password);
 }
 ?>
