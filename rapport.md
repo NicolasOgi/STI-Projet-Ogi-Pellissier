@@ -186,31 +186,36 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   
   - Tampering
   
+  - Repudiation (supprimer un message envoyé, depuis la boîte mail du destinataire)
+  
   - Information disclosure
   
     
 
-#### 2. Contourner le système d'autorisation afin d'accéder aux messages des autres employés
+#### 2. Contourner le système d'autorisation afin d'effectuer des actions sur les messages des autres employés
 
-- **Impact sur l'entreprise** : moyen (perte de confidentialité)
+- **Impact sur l'entreprise** : moyen (perte de confidentialité, perte d'intégrité)
 
-- **Source de la menace** : employé malin ou curieux
+- **Source de la menace** : employé mécontent ou malin
 
-- **Motivation** : curiosité
+- **Motivation** : sabotage, curiosité
 
 - **Actif(s) visé(s)** : messages envoyés par d'autres employés
 
 - **Scénario d'attaque** :
   
-  Une fois connecté, un employé peut très facilement manipuler les paramètres de l'URL afin d'accéder à des messages contenus dans la base de données qui ne lui appartiennent pas. Ainsi, il pourrait obtenir des informations confidentielles au sein de l'entreprise qui ne lui sont pas destinées.
+  Une fois connecté, un employé peut très facilement manipuler les paramètres de l'URL afin d'accéder voire supprimer des messages contenus dans la base de données qui ne lui appartiennent pas. Ainsi, il pourrait obtenir des informations confidentielles au sein de l'entreprise qui ne lui sont pas destinées ou supprimer des messages dans un but de sabotage. De plus, le fait qu'un employé puisse supprimer n'importe quel message de la base de données fait qu'il pourrait très bien répudier l'envoi d'un message (en le supprimant et dire qu'il n'a jamais rien envoyé).
   
 - **Contrôles** :
-  - Mettre en place un système d'autorisation qui empêche les employés d'accéder aux messages dont ils ne sont pas les destinataires.
+  - Mettre en place un système d'autorisation qui empêche les employés d'effectuer des actions sur les messages dont ils ne sont pas les destinataires
   
 - **STRIDE** :
 
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
+  - Tampering
+  - Repudiation
+  
   - Information disclosure
   
     
@@ -230,7 +235,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   Comme l'application Web utilise HTTP pour échanger les données entre le client et le serveur, il est tout à fait possible de sniffer le réseau afin de récupérer les credentials d'un employé ou récupérer des messages envoyés à un autre employé. Un attaquant pourrait récupérer les credentials d'un administrateur, usurper son identité, accéder aux fonctionnalités supplémentaires (gestion admin). De manière plus active, il pourrait à l'aide d'un proxy d'interception, modifier la requête envoyée au serveur afin de porter atteinte à l'intégrité d'un message envoyé à un autre employé (en modifiant l'expéditeur d'un message par ex.).
   
 - **Contrôles** :
-  - Bien que cette contre-mesure ne sera pas mise en place dans le cadre de ce projet, la solution la plus efficace à ce problème de sécurité est de passer le serveur en HTTPS afin que tous les messages échangés soient chiffrés pour ainsi assurer la confidentialité, l'intégrité et l'authenticité.
+  - Bien que cette contre-mesure ne sera pas mise en place dans le cadre de ce projet, la solution la plus efficace à ce problème de sécurité est de passer le serveur en HTTPS afin que tous les messages échangés soient chiffrés pour ainsi assurer la confidentialité, l'intégrité et l'authenticité
   
 - **STRIDE** :
 
@@ -294,6 +299,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
   - Spoofing
   - Tampering
+  - Repudiation (supprimer un message envoyé, depuis la boîte mail du destinataire)
   - Information Disclosure
   - Elevation of privilege
   
@@ -356,9 +362,11 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
   - Spoofing
   - Tampering
+  - Repudiation (supprimer un message envoyé, depuis la boîte mail du destinataire)
+  
   - Information disclosure
   - Elevation of privilege
-
+  
   
 
  #### 6. Injection SQL
@@ -423,7 +431,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
 ## Identification des contre-mesures
 
-Dans cette partie du rapport, nous listons les contre-mesures mises en place dans l'application par rapport aux différents scénarios d'attaque identifiés, avec des détails plus techniques concernant ce qui a dû être entrepris dans le code PHP :
+Dans cette partie du rapport, nous listons les contre-mesures mises en place dans l'application par rapport aux différents scénarios d'attaque identifiés, avec des détails plus techniques concernant ce qui a dû être entrepris dans le code PHP.
 
 #### 1. Mise en place d'une politique de mot de passe
 
@@ -455,9 +463,42 @@ Afin de la mettre en place, il a fallu modifier l'exécution du code existant et
 
 
 
-#### 4. Vérification du rôle de l'utilisateur lors de l'accès à la base de données
+#### 4. Vérification de l'utilisateur connecté lors de l'accès à la base de données
+
+Cette contre-mesure correspond à la mise en place d'un système d'autorisation qui va vérifier que le numéro de destinataire d'un message est bien égal au numéro de l'utilisateur actuellement connecté à la mailbox lors d'actions sur ce dit message (afficher les détails, répondre, supprimer). En effet, cela permet d'empêcher un utilisateur d'accéder, de répondre voire de supprimer un message qui ne lui était pas destiné. Cette contre-mesure rend le scénario d'attaque 2 infaisable.
+
+Pour effectuer cela, les détails du message sont d'abord récupérés afin d'extraire le numéro de destinataire pour ensuite le comparer au numéro de l'utilisateur dont la session est ouverte. Voici un exemple avec le code de la fonction `show_msg_details()` :
+
+```php
+<?php
+/**
+ * Fonction appelée dans l'index.php afin de retourner les détails d'un mail, eux-mêmes retournés par la
+ * fonction getMailDetails située dans la partie model
+ * @throws Exception
+ */
+function show_msg_details() {
+
+    // la variable $mail est ensuite utilisée pour afficher les détails du mail dans la vue details.php
+    $mail = getMailDetails($_GET['no'])->fetch();
+
+    // les détails du message s'affichent seulement si l'utilisateur connecté en est le destinataire
+    if ($mail['recipient'] == $_SESSION["no"]) {
+        require('view/details.php');
+    }
+    else { // sinon une exception est lancée
+        throw new Exception('You do not have the rights to access this message');
+    }
+}
+?>
+```
+
+
 
 #### 5. Sanitization des inputs utilisateurs
+
+
+
+
 
 #### 6. Mise en place d'un token anti-CSRF dans les formulaires
 

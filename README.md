@@ -107,9 +107,9 @@ docker exec -u root sti_project chown www-data /usr/share/nginx
 Voici la page de login, vous demandant d'entrer un nom d'utilisateur et un mot de passe. Deux comptes sont déjà créés, un compte d'administrateur et un compte de collaborateur dont vous trouverez les informations de connexion ci-dessous :
 
 | Nom d'utilisateur | Mot de passe | Rôle           | Validité |
-| ----------------- | ------------ | -------------- | -------- |
-| admin             | admin        | Administrateur | actif    |
-| alice             | alice        | Collaborateur  | actif    |
+| ----------------- |--------------| -------------- | -------- |
+| admin             | @dm1N#9128!  | Administrateur | actif    |
+| alice             | 4l1C3%%_x81  | Collaborateur  | actif    |
 
 Dans le cas où le login devait échouer, un message d'information sera affiché en haut à gauche de la page.
 
