@@ -1,8 +1,10 @@
-# STI : Projet 1 - Manuel utilisateur
+# STI : Projet 2 - Manuel utilisateur
 
 Auteurs : Nicolas Ogi, David Pellissier
 
-Date : 13.10.21
+Modifié par : Nicolas Ogi, Rebecca Tevaearai
+
+Date : 28.12.21
 
 
 
