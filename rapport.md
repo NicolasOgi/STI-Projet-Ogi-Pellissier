@@ -2,7 +2,7 @@
 
 Auteurs : Nicolas Ogi, Rebecca Tavaearai
 
-Date : 23.12.2021
+Date : 28.12.2021
 
 [TOC]
 
@@ -174,9 +174,8 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 - **Contrôles** :
   - Définir une politique de mots de passe forte (min. 8 caractères, min. 1 chiffre, min. 1 minuscule, min. 1 majuscule, min. 1 caractère spécial)
   - Limiter le nombre de tentatives infructueuses avant de désactiver le compte mais **attention** un attaquant pourrait profiter de cette contre-mesure pour bloquer les comptes des employés, ce qui ferait perdre du temps à l'entreprise pour réactiver les comptes
-  - Limiter le débit des tentatives après un certains nombres de tentatives infructueuses
+  - Limiter le débit des tentatives après un certains nombres de tentatives infructueuses (avec un CAPTCHA par ex.)
   - Bloquer l'IP de la source après plusieurs tentatives infructueuses
-  - Mettre en place un CAPTCHA
   - Modifier le flux du login pour garder un temps constant afin d'éviter les timing attacks
   
 - **STRIDE** :
@@ -428,9 +427,33 @@ Dans cette partie du rapport, nous listons les contre-mesures mises en place dan
 
 #### 1. Mise en place d'une politique de mot de passe
 
+Cette contre-mesure permet de renforcer les mots de passe et ainsi éviter qu'ils soient trop facilement cassables.
+
+Pour faire cela, une nouvelle fonction PHP a été créée dans le fichier *controller/users.php* permettant de vérifier que le mot de passe entré lors de la création ou la modification d'un compte utilisateur respecte bien la politique de mot de passe suivante :
+
+Min. 8 caractères, min. 1 chiffre,  min. 1 majuscule, min. 1 minuscule, min. 1 caractère spécial
+
+```
+^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[0-9A-Za-z!?()<>+&=~^¦|¬;,.:_@#€£$%]{8,}$
+```
+
+
+
 #### 2. Mise en place d'un CAPTCHA
 
-#### 3. Changement du flux lors du login pour garder un temps constant
+Cette contre-mesure permet de limiter le débit des tentatives de connexion infructueuses car elle va demander de "résoudre" un CAPTCHA qui lors des premières tentatives sera juste de cocher la case "Je ne suis pas un robot" mais qui se compliquera au fur et à mesure des tentatives (reconnaissance d'objets dans des photos).
+
+Il a simplement fallu utiliser la solution clé en main [reCAPTCHA v2](https://developers.google.com/recaptcha/docs/display) proposée par Google et la mettre place dans les fichiers *view/login.php* et *controller/login.php*.
+
+
+
+#### 3. Modification du flux lors du login pour garder un temps constant
+
+Cette contre-mesure permet d'éviter les timing attacks en faisant en sorte de ne pas pouvoir savoir si un compte utilisateur existe ou non lors de tentatives de login. Combinée avec les deux contre-mesures ci-dessus, le risque lié au scénario d'attaque 1 est fortement atténué.
+
+Afin de la mettre en place, il a fallu modifier l'exécution du code existant et cette fois, au lieu de retourner directement la page de login si le compte utilisateur n'existe pas, le mot de passe entré est quand même comparé à un faux hash (à l'aide de la fonction PHP `password_verify()`) afin de rallonger artificiellement le temps de traitement de la tentative de connexion au compte.
+
+
 
 #### 4. Vérification du rôle de l'utilisateur lors de l'accès à la base de données
 
