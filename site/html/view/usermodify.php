@@ -24,7 +24,7 @@
 
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="username" type="text" placeholder="Username"
-                                       name="username" value="<?php echo $user['username'] ?>"
+                                       name="username" value="<?php echo htmlspecialchars($user['username']) ?>"
                                     <?php if ($_SESSION['role'] == ROLE_USER || !$isCreation) {
                                         echo "disabled";
                                     } ?> required/>

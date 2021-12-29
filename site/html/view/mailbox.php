@@ -12,7 +12,7 @@
 <div class="root">
     <?php require 'view/components/sidebar.php' ?>
     <div class="table-responsive">
-        <h1><?php echo $_SESSION['username'] ?></h1>
+        <h1><?php echo htmlspecialchars($_SESSION['username']) ?></h1>
         <table class="table">
             <thead>
                 <tr>
@@ -27,8 +27,8 @@
                 foreach ($mails as $mail){ ?>
                 <tr>
                     <td class="date"><?php echo substr($mail['date'], 0, 10) ?></td>
-                    <td class="sender"><?php echo $mail['sender'] ?></td>
-                    <td class="subject"><?php echo $mail['subject'] ?></td>
+                    <td class="sender"><?php echo htmlspecialchars($mail['sender']) ?></td>
+                    <td class="subject"><?php echo htmlspecialchars($mail['subject']) ?></td>
                     <td><button onclick="location.href = 'index.php?action=message&reply=<?php echo $mail['no']?>'" type="button" class="btn btn-primary">Reply</button>
                     <button onclick="location.href = 'index.php?action=details&no=<?php echo $mail['no']?>'" type="button" class="btn btn-info">Open</button>
                     <button onclick="location.href = 'index.php?action=delete_mail&no=<?php echo $mail['no']?>'" type="button" class="btn btn-danger">Delete</button></td>

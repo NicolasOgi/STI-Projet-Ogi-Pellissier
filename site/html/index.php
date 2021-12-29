@@ -1,5 +1,5 @@
 <?php
-session_set_cookie_params(10000); // durée de vie de session si > destruction automatique
+session_set_cookie_params(10000, null, null, null, true); // durée de vie de session si > destruction automatique et httpOnly à true
 session_start();
 
 require 'controller/controller.php';

@@ -263,7 +263,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
 - **Scénarios d'attaque** :
 
-  - A l'aide d'une balise `<script>` injectée dans le sujet d'un message, un attaquant peut voler le cookie *PHPSESSID* de l'employé cible en lui envoyant ce message. À l'ouverture de sa mailbox, le script sera exécuté et enverra le cookie de l'employé au site malicieux de l'attaquant, il pourra ensuite utiliser ce cookie dans son navigateur afin de lui voler sa session.
+  - A l'aide d'une balise `<script>` injectée dans le sujet d'un message par exemple, un attaquant peut voler le cookie *PHPSESSID* de l'employé cible en lui envoyant ce message. À l'ouverture de sa mailbox, le script sera exécuté et enverra le cookie de l'employé au site malicieux de l'attaquant, il pourra ensuite utiliser ce cookie dans son navigateur afin de lui voler sa session.
 
     Exemple de script :
     
@@ -290,6 +290,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 - **Contrôles** :
 
   - Assainir les inputs utilisateur pour éviter que des balises HTML soient interprétables
+  - Passer le cookie PHPSESSID en *httpOnly* pour empêcher sa récupération via `document.cookie`
 
   
 
@@ -494,7 +495,7 @@ function show_msg_details() {
 
 
 
-#### 5. Sanitization des inputs utilisateurs
+#### 5. Passage du cookie en HttpOnly et conversion des caractères spéciaux en entités HTML
 
 
 

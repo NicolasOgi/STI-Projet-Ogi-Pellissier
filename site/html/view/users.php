@@ -30,7 +30,7 @@
             <?php
             foreach ($users as $user){ ?>
                 <tr>
-                    <td><?php echo $user['username']; ?></td>
+                    <td><?php echo htmlspecialchars($user['username']); ?></td>
                     <td><?php if ($user['valid']) { echo "enabled";} else { echo "disabled";}  ?></td>
                     <td><?php if ($user['role']) { echo "Administrator";} else { echo "Collaborator";} ?></td>
                     <td>
