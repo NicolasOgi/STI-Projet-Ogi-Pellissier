@@ -2,7 +2,7 @@
 
 Auteurs : Nicolas Ogi, Rebecca Tavaearai
 
-Date : 28.12.2021
+Date : 29.12.2021
 
 [TOC]
 
@@ -290,7 +290,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 - **Contrôles** :
 
   - Assainir les inputs utilisateur pour éviter que des balises HTML soient interprétables
-  - Passer le cookie PHPSESSID en *httpOnly* pour empêcher sa récupération via `document.cookie`
+  - Passer le cookie *PHPSESSID* en *httpOnly* pour empêcher sa récupération via `document.cookie` 
 
   
 
@@ -495,15 +495,35 @@ function show_msg_details() {
 
 
 
-#### 5. Passage du cookie en HttpOnly et conversion des caractères spéciaux en entités HTML
+#### 5. Passage du cookie en HttpOnly
+
+Cette contre-mesure permet d'éviter le vol du cookie *PHPSESSID* via JavaScript avec `document.cookie`.
+
+Afin de la mettre en place, il a simplement fallu définir le paramètre *HttpOnly* à `true` à l'aide de la fonction `session_set_cookie_params()` avant l'appel à la fonction `session_start()` qui lance la session dans le fichier *index.php*.
 
 
 
+#### 6. Conversion des caractères spéciaux en entités HTML
+
+Cette contre-mesure empêche l'exécution de scripts lors d'attaques XSS car elle va convertir les caractères spéciaux en entités HTML plutôt que de les interprétés directement. Cette contre-mesure et celle d'au-dessus empêche la réalisation du scénario d'attaque 4.
+
+Pour la mettre en place, il a fallu faire appel à la fonction `htmlspecialchars()` avant d'afficher toute saisie utilisateur dans les vues.
+
+Exemple avant/après :
+
+```php
+echo $mail['subject'];
+```
+
+```php
+echo htmlspecialchars($mail['subject']);
+```
 
 
-#### 6. Mise en place d'un token anti-CSRF dans les formulaires
 
-#### 7. Préparation des requêtes SQL avant exécution
+#### 7. Mise en place d'un token anti-CSRF dans les formulaires
+
+#### 8. Préparation des requêtes SQL avant exécution
 
 
 
