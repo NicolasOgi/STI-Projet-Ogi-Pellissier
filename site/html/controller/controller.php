@@ -16,6 +16,8 @@
     require 'model/login.php';
     require 'model/db.php';
 
+    require 'utils/csrf.php';
+
 /**
  * Fonction permettant de rediriger l'utilisateur sur la mailbox s'il est connecté ou sur la page de login si ce n'est
  * pas le cas

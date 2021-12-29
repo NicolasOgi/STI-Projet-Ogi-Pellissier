@@ -31,5 +31,5 @@
             <a href="index.php?action=admin" class="btn btn-warning" data-toggle="modal" data-target="#compose-modal"><i class="fa fa-list" aria-hidden="true"></i> Users list</a>
             <br/>
         <?php } ?>
-        <a href="index.php?action=logout" class="btn btn-danger" data-toggle="modal" data-target="#compose-modal">Disconnect</a>
+        <a href="index.php?action=logout&csrf_token=<?php echo $_SESSION['csrf_token']?>" class="btn btn-danger" data-toggle="modal" data-target="#compose-modal">Disconnect</a>
 </nav>

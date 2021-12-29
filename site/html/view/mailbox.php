@@ -31,7 +31,7 @@
                     <td class="subject"><?php echo htmlspecialchars($mail['subject']) ?></td>
                     <td><button onclick="location.href = 'index.php?action=message&reply=<?php echo $mail['no']?>'" type="button" class="btn btn-primary">Reply</button>
                     <button onclick="location.href = 'index.php?action=details&no=<?php echo $mail['no']?>'" type="button" class="btn btn-info">Open</button>
-                    <button onclick="location.href = 'index.php?action=delete_mail&no=<?php echo $mail['no']?>'" type="button" class="btn btn-danger">Delete</button></td>
+                    <button onclick="location.href = 'index.php?action=delete_mail&no=<?php echo $mail['no']?>&csrf_token=<?php echo $_SESSION['csrf_token']?>'" type="button" class="btn btn-danger">Delete</button></td>
                 </tr>
                 <?php } ?>
             </tbody>

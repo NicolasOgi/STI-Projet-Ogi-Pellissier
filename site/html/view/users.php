@@ -36,7 +36,7 @@
                     <td>
                         <a class="btn btn-success btn-xs glyphicon glyphicon-ok" href="index.php?action=update_user&no=<?php echo $user['no'] ?>"
                            title="View">Edit</a>
-                        <a class="btn btn-danger  btn-xs glyphicon glyphicon-trash" href="index.php?action=delete_user&no=<?php echo $user['no'] ?>" title="Delete">Delete</a>
+                        <a class="btn btn-danger  btn-xs glyphicon glyphicon-trash" href="index.php?action=delete_user&no=<?php echo $user['no'] ?>&csrf_token=<?php echo $_SESSION['csrf_token']?>" title="Delete">Delete</a>
                     </td>
                 </tr>
             <?php } ?>

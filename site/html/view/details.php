@@ -37,7 +37,7 @@
                             </div>
 
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" id="message" placeholder="Message" style="height: 10rem;" disabled><?php echo htmlspecialchars($mail['body']) ?></textarea>
+                                <textarea class="form-control" id="message" placeholder="Message" style="height: 10rem;" disabled><?php echo $mail['body'] ?></textarea>
                                 <label for="message">Message</label>
                             </div>
 
@@ -46,7 +46,7 @@
                             </div>
                             <br>
                             <div class="d-grid">
-                                <button onclick="location.href = 'index.php?action=delete_mail&no=<?php echo $mail['no']?>'" type="button" class="btn btn-danger">Delete</button>
+                                <button onclick="location.href = 'index.php?action=delete_mail&no=<?php echo $mail['no']?>&csrf_token=<?php echo $_SESSION['csrf_token']?>'" type="button" class="btn btn-danger">Delete</button>
                             </div>
                         </form>
                     </div>

@@ -34,10 +34,13 @@
                             </div>
 
                             <div class="form-floating mb-3">
-                                <textarea name="body" class="form-control" id="message" type="text" placeholder="Message" style="height: 10rem;" data-sb-validations="required"><?php if (isset($_GET['reply'])) echo "\n\n-------------------------------------\n" . htmlspecialchars($mail['body']) ?></textarea>
+                                <textarea name="body" class="form-control" id="message" type="text" placeholder="Message" style="height: 10rem;" data-sb-validations="required"><?php if (isset($_GET['reply'])) echo "\n\n-------------------------------------\n" . $mail['body'] ?></textarea>
                                 <label for="message">Message</label>
                                 <div class="invalid-feedback" data-sb-feedback="message:required">Message is required.</div>
                             </div>
+
+                            <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"/>
+
                             <div class="d-grid">
                                 <button class="btn btn-primary btn-lg" id="submitButton" type="submit">Send</button>
                             </div>

@@ -77,6 +77,8 @@
                                 <label class="form-check-label" for="defaultCheck1">Account validity</label>
                             </div>
 
+                            <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"/>
+
                             <div class="d-grid">
                                 <button class="btn btn-primary btn-lg" id="submitButton" type="submit"><?php echo $isCreation ? "Create" : "Edit"?></button>
                             </div>
