@@ -521,7 +521,19 @@ echo htmlspecialchars($mail['subject']);
 
 
 
-#### 7. Mise en place d'un token anti-CSRF dans les formulaires
+#### 7. Mise en place d'un token anti-CSRF
+
+Cette contre-mesure empêche la réalisation d'attaques CSRF qui forcent un utilisateur authentifié à effectuer une action involontaire sans qu'il ne s'en rende compte. Elle permet d'empêcher le scénario d'attaque 5.
+
+Pour faire cela, il a fallu d'abord générer un token pseudo-aléatoire et donc non-prédictible à l'aide de cette combinaison de fonctions `bin2hex(openssl_random_pseudo_bytes(32))`. Le token anti-CSRF est généré au début de chaque nouvelle session dans le fichier *index.php*. Au chargement d'une page, il est dynamiquement ajouté par le serveur comme champ caché dans un formulaire afin de le récupérer en tant que paramètre POST ou dans l'URL lors d'actions afin de le récupérer en tant que paramètre GET.
+
+Ensuite, avant chaque action qui engendre une modification de la base de données (c-à-d. envoyer/supprimer un message ou ajouter/modifier/supprimer un utilisateur), le token est vérifié dans différentes fonctions des controllers afin de s'assurer que l'action est bien effectuée depuis une page chargée du site web et non depuis un domaine tiers.
+
+Concernant le formulaire de la page de login, un token anti-CSRF n'était pas requis car le CAPTCHA fait déjà office de vérification, on ne peut pas le valider sans avoir chargé la page au préalable. Ainsi, grâce à lui, il n'est déjà pas possible de forcer un utilisateur à se connecter à un compte.
+
+Pour ce qui est du logout, le token anti-CSRF a été ajouté à cette action bien qu'elle n'engendre pas de modification de la DB mais cela permet d'éviter qu'un utilisateur authentifié soit forcé à se déconnecter car cela peut être la première étape d'une tentative de phishing perpétrée par un attaquant. En effet, un attaquant pourrait ensuite présenter un faux formulaire de connexion afin de voler les credentials de l'utilisateur piégé.
+
+
 
 #### 8. Préparation des requêtes SQL avant exécution
 
