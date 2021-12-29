@@ -27,11 +27,11 @@ function deleteMail(){
             mailbox();
         }
         else { // sinon une exception est lancée
-            throw new Exception('You do not have the rights to delete this message');
+            throw new Exception(ERROR_DELETE_MESSAGE);
         }
     }
     else {
-        $_SESSION['message'] = "The anti-CSRF token couldn't be verified";
+        $_SESSION['message'] = ERROR_CSRF_TOKEN;
         mailbox();
     }
 }

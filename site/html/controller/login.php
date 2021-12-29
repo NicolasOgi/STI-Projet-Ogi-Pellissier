@@ -30,13 +30,13 @@ function login() {
                         @header("location: index.php?action=home");
                     }
                     else { // sinon la page de login s'affiche avec un message d'erreur
-                        $_SESSION['message'] = "This user is disabled";
+                        $_SESSION['message'] = ERROR_USER_DISABLED;
                         require "view/login.php";
                     }
                 }
             }
             else { // Sinon la page de login est rechargée et un message d'erreur est affiché
-                $_SESSION['message'] = "CAPTCHA verification failed, try again";
+                $_SESSION['message'] = ERROR_CAPTCHA;
                 require "view/login.php";
             }
 

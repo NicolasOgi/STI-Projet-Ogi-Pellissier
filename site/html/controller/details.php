@@ -14,7 +14,7 @@ function show_msg_details() {
         require('view/details.php');
     }
     else { // sinon une exception est lancée
-        throw new Exception('You do not have the rights to access this message');
+        throw new Exception(ERROR_ACCESS_MESSAGE);
     }
 }
 ?>

@@ -31,7 +31,7 @@ function checkLogin($postArray)
             'role' => $results['role'],
         );
     } else { // si le mot de passe est incorrect
-        $_SESSION['message'] = "The user does not exist or the password is incorrect";
+        $_SESSION['message'] = ERROR_PASSWORD_OR_USER_INCORRECT;
         require 'view/login.php';
     }
     return @$infoUser; // renvoie le tableau contenant les infos de l'utilisateur

@@ -19,7 +19,7 @@ function logout() {
         require 'view/login.php';
     }
     else {
-        $_SESSION['message'] = "The anti-CSRF token couldn't be verified";
+        $_SESSION['message'] = ERROR_CSRF_TOKEN;
         mailbox();
     }
 }
@@ -32,7 +32,7 @@ function logout() {
 function administration() {
     // si l'utilisateur n'est pas un administrateur
     if($_SESSION['role'] != ROLE_ADMIN){
-        throw new Exception('You do not have the rights to access this page');
+        throw new Exception(ERROR_ACCESS_PAGE);
     }
 
     // récupération des utilisateurs dans la DB afin qu'ils soient affichés dans la vue grâce à la variable $users
@@ -51,7 +51,7 @@ function changeUserDetails() {
 
     // si l'utilisateur n'est pas admin et qu'il essaie de modifier un autre utilisateur que lui-même
     if($_SESSION['role'] != ROLE_ADMIN && $userNo != $_SESSION['no']){
-        throw new Exception('You do not have the rights to modify this user');
+        throw new Exception(ERROR_MODIFY_USER);
     }
 
     if (empty($_POST)){
@@ -64,7 +64,7 @@ function changeUserDetails() {
             require 'view/usermodify.php';
         }
         else { // sinon l'utilisateur n'existe pas
-            $_SESSION['message'] = "This user does not exist";
+            $_SESSION['message'] = ERROR_USER_NOT_EXIST;
             administration();
         }
     }
@@ -82,21 +82,19 @@ function changeUserDetails() {
                 // et empêche qu'un administrateur soit déconnecté s'il modifie le mot de passe d'un compte qui n'est
                 // pas le sien
                 if($userNo == $_SESSION['no']){
-                    $_SESSION['message'] = "Your password has been updated. Please log in again";
+                    $_SESSION['message'] = PASSWORD_UPDATED;
                     logout();
                     exit();
                 }
             }
             else {
-                $_SESSION['message'] = "The password does not match the security policy, "
-                    . "it should be at least 8 char long, should contain at least one uppercase char, one lowercase char, "
-                    . "one digit and one special character";
+                $_SESSION['message'] = ERROR_PASSWORD_POLICY;
                 mailbox();
                 exit();
             }
         }
         else {
-            $_SESSION['message'] = "The anti-CSRF token couldn't be verified";
+            $_SESSION['message'] = ERROR_CSRF_TOKEN;
             mailbox();
             exit();
         }
@@ -109,11 +107,11 @@ function changeUserDetails() {
 
             // appel de la fonction permettant de mettre à jour les données dans la DB
             updateUserNonEmptyFields($userNo);
-            $_SESSION['message'] = "The account has been modified";
+            $_SESSION['message'] = USER_MODIFIED;
             administration();
         }
         else {
-            $_SESSION['message'] = "The anti-CSRF token couldn't be verified";
+            $_SESSION['message'] = ERROR_CSRF_TOKEN;
             administration();
         }
     }
@@ -127,7 +125,7 @@ function addUser(){
 
     // si l'utilisateur n'est pas un administrateur
     if($_SESSION['role'] != ROLE_ADMIN){
-        throw new Exception('You do not have the rights to access this page');
+        throw new Exception(ERROR_ACCESS_PAGE);
     }
 
     // si ce n'est pas null alors l'utilisateur existe déjà et c'est donc une modification
@@ -145,20 +143,18 @@ function addUser(){
                     $validity = isset($_POST['valid']) ? "1 " : "0 ";
                     // appel de la fonction permettant de créer le nouvel utilisateur dans la DB
                     insertUser($_POST['username'], $_POST["password"], $validity, $_POST["role"]);
-                    $_SESSION['message'] = "The account has been created";
+                    $_SESSION['message'] = USER_CREATED;
                 }
                 else {
-                    $_SESSION['message'] = "The password does not match the security policy, "
-                        . "it should be at least 8 char long, should contain at least one uppercase char, one lowercase char, "
-                        . "one digit and one special character";
+                    $_SESSION['message'] = ERROR_PASSWORD_POLICY;
                 }
 
             } catch(Exception $e){
-                $_SESSION['message'] = "The account couldn't be created";
+                $_SESSION['message'] = ERROR_CREATE_USER;
             }
         }
         else {
-            $_SESSION['message'] = "The anti-CSRF token couldn't be verified";
+            $_SESSION['message'] = ERROR_CSRF_TOKEN;
         }
         administration();
     }
@@ -172,7 +168,7 @@ function deleteUser(){
 
     // si l'utilisateur n'est pas un administrateur
     if($_SESSION['role'] != ROLE_ADMIN){
-        throw new Exception('You do not have the rights to access this page');
+        throw new Exception(ERROR_ACCESS_PAGE);
     }
 
     // vérification du token anti-CSRF à la suppression d'un utilisateur
@@ -189,15 +185,15 @@ function deleteUser(){
                 dropUser($userNo);
             }
             else {
-                $_SESSION['message'] = "You cannot delete yourself";
+                $_SESSION['message'] = ERROR_DELETE_ONESELF;
             }
         }
         else {
-            $_SESSION['message'] = "This user does not exist";
+            $_SESSION['message'] = ERROR_USER_NOT_EXIST;
         }
     }
     else {
-        $_SESSION['message'] = "The anti-CSRF token couldn't be verified";
+        $_SESSION['message'] = ERROR_CSRF_TOKEN;
     }
     administration();
 }

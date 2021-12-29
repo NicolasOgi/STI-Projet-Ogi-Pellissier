@@ -17,7 +17,7 @@ function new_msg(){
 
             // si le résultat de la fonction getUserByLogin est vide, alors le destinataire n'existe pas
             if (empty($results['username'])) {
-                $_SESSION['message'] = "The user does not exist";
+                $_SESSION['message'] = ERROR_USER_NOT_EXIST;
                 require 'view/message.php';
             }
             else {
@@ -27,12 +27,12 @@ function new_msg(){
                 $date = date("Y-m-d H:i:s");
                 // appel de la fonction qui permet d'inscrire le mail dans la DB
                 sendMail($_SESSION['no'], $results['no'], $_POST['subject'], $_POST['body'], $date);
-                $_SESSION['message'] = "The message has been sent";
+                $_SESSION['message'] = MESSAGE_SENT;
                 mailbox();
             }
         }
         else {
-            $_SESSION['message'] = "The anti-CSRF token couldn't be verified";
+            $_SESSION['message'] = ERROR_CSRF_TOKEN;
             require 'view/message.php';
         }
     }
@@ -45,7 +45,7 @@ function new_msg(){
 
             // une exception est lancée si l'utilisateur connecté n'est pas le destinataire du message
             if ($mail['recipient'] != $_SESSION["no"]) {
-                throw new Exception('You do not have the rights to reply to this message');
+                throw new Exception(ERROR_REPLY_MESSAGE);
             }
         }
         require 'view/message.php';
