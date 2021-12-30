@@ -589,3 +589,12 @@ Pour la mettre en place, il a simplement fallu générer un mot de passe très f
 
 ## Conclusion
 
+Pour conclure, nous avons su identifier les différentes menaces et scénarios d'attaque prenant l'application Web ainsi que sa base de données pour cibles et nous avons pu mettre en place les contre-mesures adaptés permettant de les contrer.
+
+Il a été intéressant de faire ce projet en deux parties, d'abord réaliser une application Web de messagerie sans "budget" pour la sécurité puis identifier ses failles afin de les corriger. Cela nous permis de mettre en pratique certains mécanismes de sécurité vus uniquement en théorie jusqu'à maintenant ainsi que de réaliser qu'une sécurité parfaite n'existe pas et qu'il n'y a pas forcement besoin de transformer cette application Web en véritable coffre-fort.
+
+Les difficultés rencontrées lors de ce projet ont été les suivantes :
+
+- Mettre en place un DFD compréhensible afin de rendre claire la description du sytème
+- Identifier et tester des attaques pertinentes sur l'application Web
+- Mettre en place de manière correcte un token anti-CSRF
