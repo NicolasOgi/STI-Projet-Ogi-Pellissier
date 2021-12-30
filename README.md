@@ -4,7 +4,7 @@ Auteurs : Nicolas Ogi, David Pellissier
 
 Modifié par : Nicolas Ogi, Rebecca Tevaearai
 
-Date : 28.12.21
+Date : 30.12.21
 
 
 
@@ -87,6 +87,8 @@ docker exec -u root sti_project service php5-fpm start # pour PHP
 ```
 
 **ATTENTION** : Avant de lancer les commandes Docker ci-dessus, assurez-vous d'avoir bien installé et lancé le Docker Engine sur votre machine.
+
+
 
 4. Changer les droits du fichier `/usr/share/nginx` afin que la base de données puisse être modifiée, avec la commande ci-dessous :
 
@@ -205,3 +207,11 @@ Comme dans la boîte mail, il est aussi possible de répondre au message et de l
 ### Supprimer un mail ou un utilisateur
 
 Il est possible de supprimer un mail ou un utilisateur à l'aide des différents bouton *Delete*, cependant attention, **il n'y a aucune demande de confirmation avant suppression**.
+
+
+
+### Accéder à la page de gestion de la base de données
+
+La page de gestion de la base de données est accessible via cette URL : http://localhost:8081/phpliteadmin.php
+
+**ATTENTION** : La page est seulement accessible en entrant le mot de passe trouvable au début du fichier *phpliteadmin.php* assigné à la variable `$password`.

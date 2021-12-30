@@ -2,7 +2,7 @@
 
 Auteurs : Nicolas Ogi, Rebecca Tavaearai
 
-Date : 29.12.2021
+Date : 30.12.2021
 
 [TOC]
 
@@ -418,7 +418,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
 - **Scénario d'attaque** :
 
-  Comme la page de gestion SQLite est accessible si l'on connait le nom de la ressource, un attaquant pourrait dans un premier temps brute-forcer les noms des fichiers accessibles via l'URL à l'aide de différents outils existants (ZAP, DirBuster, Burp Intruder, etc...) et ainsi obtenir l'arborescence du site. Puis, si une politique de mot de passe n'a pas vraiment été définie, il pourrait tenter de brute-forcer les credentials de la DB afin d'y accéder. Si l'accès est obtenu, il s'agit de la vulnérabilité la plus grave identifiée car un attaquant pourrait littéralement avoir accès à toutes les données de l'application et les copier, les supprimer ou les modifier. Il pourrait même supprimer la base de données entièrement et ainsi rendre l'application indisponible.
+  Comme la page de gestion SQLite est accessible si l'on connait le nom de la ressource, un attaquant pourrait dans un premier temps brute-forcer les noms des fichiers accessibles via l'URL à l'aide de différents outils existants (ZAP, DirBuster, Burp Intruder, etc...) et ainsi obtenir l'arborescence du site. Puis, si une politique de mot de passe n'a pas vraiment été définie voire même que le mot de passe par défaut n'a pas été modifié (en général *admin* ou *password*), il pourrait brute-forcer les credentials de la DB en peu de temps afin d'y accéder. Si l'accès est obtenu, il s'agit de la vulnérabilité la plus grave identifiée car un attaquant pourrait littéralement avoir accès à toutes les données de l'application et les copier, les supprimer ou les modifier. Il pourrait même supprimer la base de données entièrement et ainsi rendre l'application indisponible.
 
 - **Contrôles** :
 
@@ -547,7 +547,43 @@ Pour ce qui est du logout, le token anti-CSRF a été ajouté à cette action bi
 
 #### 8. Préparation des requêtes SQL avant exécution
 
-Cette contre-mesure permet d'éviter les injections SQL dans les requêtes légitimes. 
+Cette contre-mesure permet d'éviter les injections SQL dans les requêtes légitimes. Elle vient contrer le scénario d'attaque 6. La mise en place d'une politique de mot de passe a déjà permis d'atténuer le risque d'injection SQL pour modifier le mot de passe d'un utilisateur car cette contre-mesure a restreint l'utilisation de certains caractères spéciaux qui étaient interprétables (notamment le tiret (`-`) et l'apostrophe (`'`)). De plus, la mise en place d'un système d'autorisation a également permis d'atténuer ce risque car si une injection SQL avait permis de récupérer un message destiné à un autre employé, le numéro de destinataire est comparé avec celui de l'utilisateur connecté juste après la requête, ce qui rend ce message impossible à récupérer sans en être le destinataire.
+
+Pour mettre en place cette contre-mesure, il a fallu modifier les différentes requêtes exécutées dans les models en utilisant des *prepared statements*. Exemple avant/après :
+
+```php
+$request = "SELECT Message.no, User.username as 'sender', noRecipient as 'recipient', subject, body, date 
+            FROM Message
+            	INNER JOIN User
+            		ON Message.noSender = User.no
+            WHERE Message.no ='" . $no . "'";
+    
+return $db->query($request);
+```
+
+```php
+$request = "SELECT Message.no, User.username as 'sender', noRecipient as 'recipient', subject, body, date 
+            FROM Message
+            	INNER JOIN User
+                        ON Message.noSender = User.no
+            WHERE Message.no = :no";
+
+$query = $db->prepare($request);
+$query->bindParam(':no', $no);
+$query->execute();
+
+return $query;
+```
+
+Grâce aux *prepared statements*, les variables liées sont envoyées au serveur séparément de la requête, ne pouvant ainsi pas interférer avec celle-ci. Cette méthode permet de se protéger plus efficacement contre les injections SQL plutôt que de simplement tenter d'échapper certains caractères.
+
+
+
+#### 9. Modifier le mot de passe par défaut de la page de gestion de la base de données
+
+Cette contre-mesure nécessite simplement de définir un mot de passe très fort pour que le brute-force ne soit plus une option viable. Elle vient contrer le scénario d'attaque 7.
+
+Pour la mettre en place, il a simplement fallu générer un mot de passe très fort (30 caractères, des majuscules/minuscules/chiffres/caractères spéciaux) et modifier la valeur de la variable `$password` à la ligne 47 du fichier *phpliteadmin.php*.
 
 
 
