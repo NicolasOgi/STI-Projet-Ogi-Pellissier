@@ -66,7 +66,7 @@ function change_user_details() {
                 // pas le sien
                 if($userNo == $_SESSION['no']){
                     $_SESSION['message'] = PASSWORD_UPDATED;
-                    logout();
+                    @header("location: index.php?action=logout&csrf_token=". $_POST['csrf_token']);
                     exit();
                 }
             }
