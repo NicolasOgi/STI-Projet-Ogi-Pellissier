@@ -1,8 +1,6 @@
 <?php
-
 /**
  * Fonction permettant de générer un token anti-CSRF
- * @return void
  */
 function generateCSRFToken()
 {
@@ -15,8 +13,8 @@ function generateCSRFToken()
 
 /**
  * Fonction permettant de vérifier le token anti-CSRF
- * @param $token token anti-CSRF à vérifier
- * @return bool true s'il est valide, false sinon
+ * @param string $token Token anti-CSRF à vérifier
+ * @return false|true true s'il est valide, false sinon
  */
 function verifyCSRFToken($token)
 {

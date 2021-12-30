@@ -52,7 +52,7 @@
  * pas le cas
  */
 function home() {
-    if(checkConnected()) {
+    if(check_if_connected()) {
             mailbox();
     }
     else {

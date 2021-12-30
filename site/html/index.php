@@ -34,17 +34,17 @@ try {
                 administration();
                 break;
             case 'delete_mail':
-                deleteMail();
+                delete_msg();
                 break;
             case 'change_password':
             case 'update_user':
-                changeUserDetails();
+                change_user_details();
                 break;
             case 'delete_user':
-                deleteUser();
+                delete_user();
                 break;
             case 'add_user':
-                addUser();
+                add_user();
                 break;
             default :
                 throw new Exception("Requested action unknown");

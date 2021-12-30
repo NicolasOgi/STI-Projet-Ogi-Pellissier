@@ -1,6 +1,6 @@
 <?php
 /**
- * Fonction permettant d'écrire un nouveau message
+ * Fonction permettant d'écrire un nouveau message et de l'envoyer
  * @throws Exception
  */
 function new_msg(){
@@ -12,7 +12,7 @@ function new_msg(){
         if (verifyCSRFToken($_POST['csrf_token'])) {
 
             // récupération du destinataire
-            $results = getUserByLogin($_POST['recipient']);
+            $results = getUserByUsername($_POST['recipient']);
             $results = $results->fetch();
 
             // si le résultat de la fonction getUserByLogin est vide, alors le destinataire n'existe pas
@@ -49,6 +49,32 @@ function new_msg(){
             }
         }
         require 'view/message.php';
+    }
+}
+
+/**
+ * Fonction permettant de supprimer un mail en fonction de son numéro reçu par un paramètre GET
+ * @throws Exception
+ */
+function delete_msg(){
+
+    if (verifyCSRFToken($_GET['csrf_token'])) {
+        // Les détails du mail à supprimer sont récupérés dans un premier temps afin de vérifier que l'utilisateur connecté
+        // ne puisse supprimer que les mails dont il est le destinataire
+        $mail = getMailDetails($_GET['no'])->fetch();
+
+        if ($mail['recipient'] == $_SESSION["no"]) {
+            // appel à la fonction présente dans le model
+            deleteMail($_GET['no']);
+            mailbox();
+        }
+        else { // sinon une exception est lancée
+            throw new Exception(ERROR_DELETE_MESSAGE);
+        }
+    }
+    else {
+        $_SESSION['message'] = ERROR_CSRF_TOKEN;
+        mailbox();
     }
 }
 ?>

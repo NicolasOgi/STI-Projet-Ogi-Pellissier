@@ -1,7 +1,7 @@
 <?php
 /**
  * Fonction permettant de hasher un mot de passe
- * @param $password mot de passe à hasher
+ * @param string $password Mot de passe à hasher
  * @return false|string|null le hash du mot de passe
  */
 function hashPassword($password) {
@@ -10,8 +10,8 @@ function hashPassword($password) {
 
 /**
  * Fonction permettant de mettre à jour le mot de passe
- * @param $id numéro unique de l'utilisateur
- * @param $newPassword nouveau mot de passe
+ * @param int $id             Numéro unique de l'utilisateur
+ * @param string $newPassword Nouveau mot de passe
  * @return false|PDOStatement résultat de la requête
  */
 function updatePassword($id, $newPassword) {
@@ -29,7 +29,7 @@ function updatePassword($id, $newPassword) {
 
 /**
  * Fonction permettant de mettre à jour les champs d'un utilisateur dans la DB
- * @param $id numéro unique de l'utilisateur
+ * @param int $id Numéro unique de l'utilisateur
  * @return false|PDOStatement résultat de la requête
  */
 function updateUserNonEmptyFields($id){
@@ -54,7 +54,7 @@ function updateUserNonEmptyFields($id){
 
 /**
  * Fonction permettant de récupérer les infos d'un utilisateur
- * @param $no numéro unique de l'utilisateur dont il faut récupérer les infos
+ * @param int $no Numéro unique de l'utilisateur dont il faut récupérer les infos
  * @return false|PDOStatement
  */
 function getUserByID($no) {
@@ -86,8 +86,8 @@ function getAllUsers() {
 
 /**
  * Fonction permettant de supprimer un utilisateur de la DB
- * @param $id numéro unique appartenant à l'utilisateur qu'il faut supprimer
- * @return false|PDOStatement résultat de la requête
+ * @param int $id Numéro unique appartenant à l'utilisateur qu'il faut supprimer
+ * @return true|false résultat de la requête
  */
 function dropUser($id){
     $db = connect();
@@ -101,10 +101,10 @@ function dropUser($id){
 
 /**
  * Fonction permettant de créer un nouvel utilisateur dans la DB
- * @param $username nom de l'utilisateur
- * @param $password mot de passe
- * @param $valid    compte activé('1') ou non('0')
- * @param $role     administrateur('1') ou collaborateur('0')
+ * @param string $username Nom de l'utilisateur
+ * @param string $password Mot de passe de l'utilisateur
+ * @param int $valid       Compte activé('1') ou non('0')
+ * @param int $role        Administrateur('1') ou collaborateur('0')
  * @return false|PDOStatement
  */
 function insertUser($username, $password, $valid, $role){

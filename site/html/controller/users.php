@@ -1,33 +1,16 @@
 <?php
-
 /**
  * Fonction retournant la variable de session indiquant si l'utilisateur est connecté
- * @return bool true si l'utilisateur est connecté, false sinon
+ * @return false|true True si l'utilisateur est connecté, false sinon
  */
-function checkConnected() {
+function check_if_connected() {
     return $_SESSION['isConnected'];
-}
-
-/**
- * Fonction permettant de détruire la session et de retourner sur la page de login
- */
-function logout() {
-
-    // Vérification du token anti-CSRF lors d'une déconnexion de l'utilisateur
-    if (verifyCSRFToken($_GET['csrf_token'])) {
-        session_destroy();
-        require 'view/login.php';
-    }
-    else {
-        $_SESSION['message'] = ERROR_CSRF_TOKEN;
-        mailbox();
-    }
 }
 
 /**
  * Fonction permettant de récupérer la liste des utilisateurs afin de les afficher dans la vue users.php accessible par
  * les administrateurs
- * @throws Exception dans le cas où un collaborateur essaie d'accéder à cette vue
+ * @throws Exception Dans le cas où un collaborateur essaie d'accéder à cette vue
  */
 function administration() {
     // si l'utilisateur n'est pas un administrateur
@@ -42,9 +25,9 @@ function administration() {
 
 /**
  * Fonction permettant de modifier les informations d'utilisateur existant
- * @throws Exception dans le cas où un collaborateur essaie d'accéder à cette vue
+ * @throws Exception Dans le cas où un collaborateur essaie d'accéder à cette vue
  */
-function changeUserDetails() {
+function change_user_details() {
 
     // récupération du numéro unique de l'utilisateur
     $userNo = $_GET['no'];
@@ -73,7 +56,7 @@ function changeUserDetails() {
         // on vérifie le token anti-CSRF au changement du mot de passe
         if (verifyCSRFToken($_POST['csrf_token'])) {
 
-            if (passwordMatchesSecurityPolicy($_POST['password'])) {
+            if (password_matches_security_policy($_POST['password'])) {
 
                 // appel de la fonction permettant de faire la modification dans la DB
                 updatePassword($userNo, $_POST['password']);
@@ -119,9 +102,9 @@ function changeUserDetails() {
 
 /**
  * Fonction permettant de créer un nouvel utilisateur
- * @throws Exception dans le cas où un collaborateur essaie d'accéder à cette vue
+ * @throws Exception Dans le cas où un collaborateur essaie d'accéder à cette vue
  */
-function addUser(){
+function add_user(){
 
     // si l'utilisateur n'est pas un administrateur
     if($_SESSION['role'] != ROLE_ADMIN){
@@ -139,8 +122,8 @@ function addUser(){
         if (verifyCSRFToken($_POST['csrf_token'])) {
 
             try {
-                if (passwordMatchesSecurityPolicy($_POST["password"])) {
-                    $validity = isset($_POST['valid']) ? "1 " : "0 ";
+                if (password_matches_security_policy($_POST["password"])) {
+                    $validity = isset($_POST['valid']) ? 1 : 0;
                     // appel de la fonction permettant de créer le nouvel utilisateur dans la DB
                     insertUser($_POST['username'], $_POST["password"], $validity, $_POST["role"]);
                     $_SESSION['message'] = USER_CREATED;
@@ -164,7 +147,7 @@ function addUser(){
  * Fonction permettant de supprimer un utilisateur
  * @throws Exception
  */
-function deleteUser(){
+function delete_user(){
 
     // si l'utilisateur n'est pas un administrateur
     if($_SESSION['role'] != ROLE_ADMIN){
@@ -200,10 +183,10 @@ function deleteUser(){
 
 /**
  * Fonction permettant de vérifier si un mot de passe correspond à la politique de sécurité
- * @param $password  mot de passe à vérifier
- * @return false|true
+ * @param string $password Mot de passe à vérifier
+ * @return false|int 1 si le mot de passe matche, false sinon
  */
-function passwordMatchesSecurityPolicy($password) {
+function password_matches_security_policy($password) {
     // min. 8 caractères, min. 1 chiffre,  min. 1 majuscule, min. 1 minuscule, min. 1 caractère spécial selon la liste
     return preg_match("/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[0-9A-Za-z!?()<>+&=~^¦|¬;,.:_@#€£$%]{8,}$/", $password);
 }

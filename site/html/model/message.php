@@ -1,12 +1,12 @@
 <?php
 /**
  * Fonction permettant d'écrire un nouveau mail dans la DB
- * @param $noSender    numéro unique de l'expéditeur
- * @param $noRecipient numéro unique du destinataire
- * @param $subject     sujet du mail
- * @param $body        corps du mail
- * @param $date        date du mail
- * @return bool        true si le mail a bien été écrit dans la DB, false sinon
+ * @param int $noSender    Numéro unique de l'expéditeur
+ * @param int $noRecipient Numéro unique du destinataire
+ * @param string $subject  Sujet du mail
+ * @param string $body     Corps du mail
+ * @param string $date     Date du mail
+ * @return false|true True si le mail a bien été écrit dans la DB, false sinon
  */
 function sendMail($noSender, $noRecipient, $subject, $body, $date) {
 

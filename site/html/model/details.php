@@ -1,7 +1,7 @@
 <?php
 /**
  * Fonction permettant de récupérer les détails d'un mail dans la DB
- * @param $no numéro unique d'un mail
+ * @param int $no Numéro unique d'un mail
  * @return false|PDOStatement le résultat de la requête
  */
 function getMailDetails($no) {
