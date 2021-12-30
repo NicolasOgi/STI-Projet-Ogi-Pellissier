@@ -12,10 +12,14 @@
                 FROM Message
                 INNER JOIN User
                 ON Message.noSender = User.no
-                WHERE noRecipient ='" . $user . "'
+                WHERE noRecipient = :user
                 ORDER BY date DESC";
-     // exécution de la requête
-     return $db->query($request);
+
+     $query = $db->prepare($request);
+     $query->bindParam(':user', $user);
+     $query->execute();
+
+     return $query;
  }
 
 /**
@@ -27,7 +31,11 @@
      $db = connect();
      $request = "DELETE 
                  FROM Message 
-                 WHERE no ='" . $no . "'";
-     return $db->query($request);
+                 WHERE no = :no";
+
+     $query = $db->prepare($request);
+     $query->bindParam(':no', $no);
+
+     return $query->execute();
  }
 ?>

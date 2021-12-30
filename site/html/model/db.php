@@ -9,8 +9,6 @@ function connect(){
         $pdo = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-        // Set errormode to exceptions
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
     }
     catch(PDOException $e) {
         // Print PDOException message

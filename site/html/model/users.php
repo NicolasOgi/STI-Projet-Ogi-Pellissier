@@ -18,9 +18,13 @@ function updatePassword($id, $newPassword) {
     $db = connect();
     $newPassword = hashPassword($newPassword);
     // création de la string pour la requête
-    $request = "UPDATE User SET password='" . $newPassword . "' WHERE no = " . $id;
-    // exécution de la requête
-    return $db->query($request);
+    $request = "UPDATE User SET password = :new_password WHERE no = :id";
+
+    $query = $db->prepare($request);
+    $query->bindParam(':new_password', $newPassword);
+    $query->bindParam(':id', $id);
+
+    return $query->execute();
 }
 
 /**
@@ -31,18 +35,21 @@ function updatePassword($id, $newPassword) {
 function updateUserNonEmptyFields($id){
 
     $db = connect();
-    $request = "UPDATE User SET ";
+    $request = "UPDATE User SET role = :role, valid = :valid WHERE no = :id";
 
     if(isset($_POST['role'])){
-        $request .= "role=" . $_POST['role'] % 2 . " "; // mod 2 car role = 0 ou 1
+        $role = $_POST['role'] % 2; // mod 2 car role = 0 ou 1
     }
 
     // valid n'est pas envoyé si la checkbox n'est pas cochée depuis la vue
-    $request .= ", valid=";
-    $request .= isset($_POST['valid']) ? "1 " : "0 ";
-    $request .= "WHERE no=" . $id;
+    $valid = isset($_POST['valid']) ? 1 : 0;
 
-    return $db->query($request);
+    $query = $db->prepare($request);
+    $query->bindParam(':role', $role);
+    $query->bindParam(':valid', $valid);
+    $query->bindParam(':id', $id);
+
+    return $query->execute();
 }
 
 /**
@@ -54,9 +61,13 @@ function getUserByID($no) {
     $db = connect();
     $request = "SELECT no, username, valid, role 
                 FROM User 
-                WHERE no ='" . $no . "'";
+                WHERE no = :no";
 
-    return $db->query($request);
+    $query = $db->prepare($request);
+    $query->bindParam(':no', $no);
+    $query->execute();
+
+    return $query;
 }
 
 /**
@@ -66,7 +77,11 @@ function getUserByID($no) {
 function getAllUsers() {
     $db = connect();
     $request = "SELECT no, username, valid, role FROM User";
-    return $db->query($request);
+
+    $query = $db->prepare($request);
+    $query->execute();
+
+    return $query;
 }
 
 /**
@@ -76,8 +91,12 @@ function getAllUsers() {
  */
 function dropUser($id){
     $db = connect();
-    $request = "DELETE FROM User WHERE no = " . $id;
-    return $db->query($request);
+    $request = "DELETE FROM User WHERE no = :id";
+
+    $query = $db->prepare($request);
+    $query->bindParam(':id', $id);
+
+    return $query->execute();
 }
 
 /**
@@ -91,7 +110,15 @@ function dropUser($id){
 function insertUser($username, $password, $valid, $role){
     $db = connect();
     $password = password_hash($password, PASSWORD_DEFAULT);
-    $request = "INSERT INTO User (username, password, valid, role) VALUES ('$username', '$password', '$valid', '$role')";
-    return $db->query($request);
+    $request = "INSERT INTO User (username, password, valid, role) VALUES (:username, :password, :valid, :role)";
+
+    $query = $db->prepare($request);
+    $query->bindValue(':username', $username);
+    $query->bindValue(':password', $password);
+    $query->bindValue(':valid', $valid);
+    $query->bindValue(':role', $role);
+
+    // exécution de la requête
+    return $query->execute();
 }
 ?>

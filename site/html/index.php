@@ -2,8 +2,8 @@
 session_set_cookie_params(10000, null, null, null, true); // durée de vie de session si > destruction automatique et httpOnly à true
 session_start();
 
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 require 'controller/controller.php';
 

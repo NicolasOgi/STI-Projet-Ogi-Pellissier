@@ -172,7 +172,7 @@ function deleteUser(){
     }
 
     // vérification du token anti-CSRF à la suppression d'un utilisateur
-    if (verifyCSRFToken($_POST['csrf_token'])) {
+    if (verifyCSRFToken($_GET['csrf_token'])) {
         $userNo = $_GET['no'];
 
         // vérifie que l'utilisateur existe

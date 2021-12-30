@@ -9,8 +9,7 @@ function checkLogin($postArray)
 {
     $username = $postArray["fLogin"];
     $passwdPost = $postArray["fPasswd"];
-    $results = getUserByLogin($username);
-    $results = $results->fetch();
+    $results = getUserByLogin($username)->fetch();
 
     // si le résultat de la fonction est vide, alors l'utilisateur n'existe pas
     if (empty($results['username'])) {
@@ -48,8 +47,12 @@ function getUserByLogin($login)
     // création de la string pour la requête
     $request = "SELECT * 
                 FROM User 
-                WHERE username ='" . $login . "'";
-    // exécution de la requête
-    return $db->query($request);
+                WHERE username = :login";
+
+    $query = $db->prepare($request);
+    $query->bindParam(':login', $login);
+    $query->execute();
+
+    return $query;
 }
 ?>

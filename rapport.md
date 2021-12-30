@@ -372,15 +372,19 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
  #### 6. Injection SQL
 
-- **Impact sur l'entreprise** :
+- **Impact sur l'entreprise** : moyen (perte de confidentialité, perte d'intégrité)
 
-- **Sources de la menace** : 
+- **Sources de la menace** :  employé mécontent ou curieux
 
-- **Motivation** : 
+- **Motivation** : divulgation d'information, curiosité, sabotage
 
-- **Actif(s) visé(s)** : 
+- **Actif(s) visé(s)** : messages des autres employés
 
-- **Scénario d'attaque** :
+- **Scénario d'attaque **(**A VERIFIER**) :
+
+  Un attaquant observe qu'en insérant un apostrophe dans le destinataire d'un message, le serveur retourne une erreur SQL lors de l'envoi de celui-ci. Le système semble donc vulnérable aux injections SQL. L'attaquant peut ainsi récupérer chaque message de la DB en manipulant l'URL en ajoutant un `1' OR 1` par exemple. Il pourrait également supprimer n'importe quel message en utilisant la même technique. 
+
+  **Voir s'il est possible de changer le mot de passe d'un autre utilisateur**
 
   
 
@@ -394,6 +398,12 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
+  - (Spoofing) (**A VERIFIER**) 
+  - Tampering
+  - Repudiation (supprimer un message envoyé)
+  - Information disclosure
+  - (Denial of service) (**A VERIFIER**) 
+  
   
 
 #### 7. Brute-force de la page de login de la base de données
@@ -536,6 +546,8 @@ Pour ce qui est du logout, le token anti-CSRF a été ajouté à cette action bi
 
 
 #### 8. Préparation des requêtes SQL avant exécution
+
+Cette contre-mesure permet d'éviter les injections SQL dans les requêtes légitimes. 
 
 
 

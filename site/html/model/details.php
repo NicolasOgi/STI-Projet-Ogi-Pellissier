@@ -6,13 +6,18 @@
  */
 function getMailDetails($no) {
     $db = connect();
+
     // Création de la string pour la requête
     $request = "SELECT Message.no, User.username as 'sender', noRecipient as 'recipient', subject, body, date 
-            FROM Message
-            INNER JOIN User
-            ON Message.noSender = User.no
-            WHERE Message.no ='" . $no . "'";
-    // exécution de la requête
-    return $db->query($request);
+                FROM Message
+                    INNER JOIN User
+                        ON Message.noSender = User.no
+                WHERE Message.no = :no";
+
+    $query = $db->prepare($request);
+    $query->bindParam(':no', $no);
+    $query->execute();
+
+    return $query;
 }
 ?>
