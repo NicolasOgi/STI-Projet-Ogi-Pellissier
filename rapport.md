@@ -1,6 +1,6 @@
 # STI : Projet 2 - Étude de menaces
 
-Auteurs : Nicolas Ogi, Rebecca Tavaearai
+Auteurs : Nicolas Ogi, Rebecca Tevaearai
 
 Date : 09.01.2022
 
