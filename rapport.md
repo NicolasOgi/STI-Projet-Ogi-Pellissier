@@ -380,7 +380,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
 - **Actif(s) visé(s)** : messages des autres employés
 
-- **Scénario d'attaque ** :
+- **Scénario d'attaque** :
 
   Un attaquant observe qu'en insérant un apostrophe dans le destinataire d'un message, le serveur retourne une erreur SQL lors de l'envoi de celui-ci. Le système semble donc vulnérable aux injections SQL. L'attaquant peut ainsi récupérer chaque message de la DB en manipulant l'URL ou en modifiant l'action effectuée par le bouton *Open* en ajoutant un `34' OR 4--` par exemple (comme le message n°34 n'existe pas dans la DB il essaie de récupérer le message n°4). Il pourrait également supprimer n'importe quel message (voire tous les messages d'un coup) en utilisant la même technique.
 
