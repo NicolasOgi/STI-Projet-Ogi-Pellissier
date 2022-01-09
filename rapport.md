@@ -2,7 +2,7 @@
 
 Auteurs : Nicolas Ogi, Rebecca Tavaearai
 
-Date : 30.12.2021
+Date : 09.01.2022
 
 [TOC]
 
@@ -380,11 +380,17 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
 - **Actif(s) visé(s)** : messages des autres employés
 
-- **Scénario d'attaque **(**A VERIFIER**) :
+- **Scénario d'attaque ** :
 
-  Un attaquant observe qu'en insérant un apostrophe dans le destinataire d'un message, le serveur retourne une erreur SQL lors de l'envoi de celui-ci. Le système semble donc vulnérable aux injections SQL. L'attaquant peut ainsi récupérer chaque message de la DB en manipulant l'URL en ajoutant un `1' OR 1` par exemple. Il pourrait également supprimer n'importe quel message en utilisant la même technique. 
+  Un attaquant observe qu'en insérant un apostrophe dans le destinataire d'un message, le serveur retourne une erreur SQL lors de l'envoi de celui-ci. Le système semble donc vulnérable aux injections SQL. L'attaquant peut ainsi récupérer chaque message de la DB en manipulant l'URL ou en modifiant l'action effectuée par le bouton *Open* en ajoutant un `34' OR 4--` par exemple (comme le message n°34 n'existe pas dans la DB il essaie de récupérer le message n°4). Il pourrait également supprimer n'importe quel message (voire tous les messages d'un coup) en utilisant la même technique.
 
-  **Voir s'il est possible de changer le mot de passe d'un autre utilisateur**
+  Supprimer tous les messages d'un coup en modifiant l'attribut `onclick` du bouton *Delete* d'un des mails contenus dans la boîte mail d'Alice :
+
+  ```html
+  <button onclick="location.href = 'index.php?action=delete_mail&amp;no=34\' OR 1=1--'" type="button" class="btn btn-danger">Delete</button>
+  ```
+
+  Ici on remplace le numéro du mail à supprimer qui était le n°3 par un numéro d'un mail qui n'existe pas (par exemple le n°34) pour que la première condition ne soit pas remplie et que le `1=1` soit évalué pour supprimer tous les mails.
 
   
 
@@ -398,11 +404,9 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
-  - (Spoofing) (**A VERIFIER**) 
   - Tampering
   - Repudiation (supprimer un message envoyé)
   - Information disclosure
-  - (Denial of service) (**A VERIFIER**) 
   
   
 

@@ -4,7 +4,7 @@ Auteurs : Nicolas Ogi, David Pellissier
 
 Modifié par : Nicolas Ogi, Rebecca Tevaearai
 
-Date : 30.12.21
+Date : 09.01.22
 
 
 
@@ -12,7 +12,7 @@ Date : 30.12.21
 
 1. Commencez par cloner ce repository GitHub à l'endroit de votre choix avec la commande :
 
-   `git clone git@github.com:david-pellissier/STI-Projet-Ogi-Pellissier.git`
+   `git clone git@github.com:NicolasOgi/STI-Projet2-Ogi-Tevaearai.git`
 
    Vous devriez obtenir l'arborescence suivante dans le dossier *site* :
    
@@ -47,6 +47,9 @@ Date : 30.12.21
        │       message.php
        │       users.php
        │
+       ├───utils
+       │       csrf.php
+       │
        └───view
            │   details.php
            │   login.php
@@ -61,7 +64,7 @@ Date : 30.12.21
                    sidebar.php
    ```
    
-   Comme ce projet a été construit avec un pattern MVC, vous retrouverez les contrôleurs dans le dossier *controller*, les modèles dans le dossier *model* et les vues dans le dossier *view*. Le dossier *components* contient des fichiers utilisés dans certaines vues afin d'afficher des informations à l'utilisateur ou insérer du code HTML.  La base de données est fournie avec le projet et est représentée par le fichier *database.sqlite* dans le dossier *databases*. Il est possible d'y accéder via le fichier *phpliteadmin.php* une fois le conteneur Docker et les services démarrés.
+   Comme ce projet a été construit avec un pattern MVC, vous retrouverez les contrôleurs dans le dossier *controller*, les modèles dans le dossier *model* et les vues dans le dossier *view*. Le dossier *components* contient des fichiers utilisés dans certaines vues afin d'afficher des informations à l'utilisateur ou insérer du code HTML. Le dossier *utils* contient un fichier PHP avec une fonction permettant de générer un token anti-CSRF et une autre permettant de le vérifier.  La base de données est fournie avec le projet et est représentée par le fichier *database.sqlite* dans le dossier *databases*. Il est possible d'y accéder via le fichier *phpliteadmin.php* une fois le conteneur Docker et les services démarrés.
 
 
 
@@ -70,11 +73,11 @@ Date : 30.12.21
 2. Pour créer le conteneur Docker, utilisez la commande :
 
 ```bash
-   docker run -ti -v ${PWD}/site:/usr/share/nginx/ -d -p 8080:80 --name sti_project --hostname sti arubinst/sti:project2018
+   docker run -ti -v ${PWD}/site:/usr/share/nginx/ -d -p 8081:80 --name sti_project2 --hostname sti arubinst/sti:project2018
 ```
-Elle permet de télécharger l'image de base *arubinst/sti:project2018* contenant les services nginx et php, de mapper le dossier *site* en local sur le dossier */usr/share/nginx/* dans le conteneur, de mapper le port 8080 local sur le port 80 du conteneur, de nommer le conteneur *sti_project* ainsi que de nommer l'hôte virtuel *sti*.
+Elle permet de télécharger l'image de base *arubinst/sti:project2018* contenant les services nginx et php, de mapper le dossier *site* en local sur le dossier */usr/share/nginx/* dans le conteneur, de mapper le port 8081 local sur le port 80 du conteneur, de nommer le conteneur *sti_project2* ainsi que de nommer l'hôte virtuel *sti*.
 
-   Si le conteneur Docker existe déjà, vous n'avez qu'à le lancer avec la commande : `docker start sti_project`
+   Si le conteneur Docker existe déjà, vous n'avez qu'à le lancer avec la commande : `docker start sti_project2`
 
 
 
@@ -82,8 +85,8 @@ Elle permet de télécharger l'image de base *arubinst/sti:project2018* contenan
 3. Lancez les deux services depuis votre host :
 
 ```bash
-docker exec -u root sti_project service nginx start # NGINX
-docker exec -u root sti_project service php5-fpm start # pour PHP
+docker exec -u root sti_project2 service nginx start # NGINX
+docker exec -u root sti_project2 service php5-fpm start # pour PHP
 ```
 
 **ATTENTION** : Avant de lancer les commandes Docker ci-dessus, assurez-vous d'avoir bien installé et lancé le Docker Engine sur votre machine.
@@ -93,12 +96,12 @@ docker exec -u root sti_project service php5-fpm start # pour PHP
 4. Changer les droits du fichier `/usr/share/nginx` afin que la base de données puisse être modifiée, avec la commande ci-dessous :
 
 ```bash
-docker exec -u root sti_project chown www-data /usr/share/nginx
+docker exec -u root sti_project2 chown www-data /usr/share/nginx
 ```
 
 
 
-5. Accédez à la page de login en tapant `localhost:8080` dans votre navigateur.
+5. Accédez à la page de login en tapant `localhost:8081` dans votre navigateur.
 
 
 
