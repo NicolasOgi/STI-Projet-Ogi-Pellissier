@@ -4,7 +4,7 @@ Auteurs : Nicolas Ogi, David Pellissier
 
 Modifié par : Nicolas Ogi, Rebecca Tevaearai
 
-Date : 09.01.22
+Date : 09.01.2022
 
 
 
@@ -70,7 +70,7 @@ Date : 09.01.22
 
 ## Lancement
 
-2. Pour créer le conteneur Docker, utilisez la commande :
+2. Pour créer le conteneur Docker, utilisez la commande ci-dessous dans le dossier créé précédemment par la commande `git clone` :
 
 ```bash
    docker run -ti -v ${PWD}/site:/usr/share/nginx/ -d -p 8081:80 --name sti_project2 --hostname sti arubinst/sti:project2018
@@ -89,11 +89,11 @@ docker exec -u root sti_project2 service nginx start # NGINX
 docker exec -u root sti_project2 service php5-fpm start # pour PHP
 ```
 
-**ATTENTION** : Avant de lancer les commandes Docker ci-dessus, assurez-vous d'avoir bien installé et lancé le Docker Engine sur votre machine.
+:warning: **ATTENTION** : Avant de lancer les commandes Docker ci-dessus, assurez-vous d'avoir bien installé et lancé le Docker Engine sur votre machine.
 
 
 
-4. Changer les droits du fichier `/usr/share/nginx` afin que la base de données puisse être modifiée, avec la commande ci-dessous :
+4. Changez les droits du fichier `/usr/share/nginx` afin que la base de données puisse être modifiée, avec la commande ci-dessous :
 
 ```bash
 docker exec -u root sti_project2 chown www-data /usr/share/nginx
@@ -101,7 +101,7 @@ docker exec -u root sti_project2 chown www-data /usr/share/nginx
 
 
 
-5. Accédez à la page de login en tapant `localhost:8081` dans votre navigateur.
+5. Accédez à la page de login dans votre navigateur en cliquant sur ce lien : [localhost:8081](http://localhost:8081)
 
 
 
@@ -109,16 +109,18 @@ docker exec -u root sti_project2 chown www-data /usr/share/nginx
 
 ### Page de login
 
-![image-20211010174302294](figures/image-20211010174302294.png)
+![image-20220109174738822](figures/image-20220109174738822.png)
 
-Voici la page de login, vous demandant d'entrer un nom d'utilisateur et un mot de passe. Deux comptes sont déjà créés, un compte d'administrateur et un compte de collaborateur dont vous trouverez les informations de connexion ci-dessous :
+Voici la page de login vous demandant d'entrer un nom d'utilisateur, un mot de passe et de valider le CAPTCHA. 
+
+Deux comptes sont déjà créés, un compte d'administrateur et un compte de collaborateur dont vous trouverez les informations de connexion ci-dessous :
 
 | Nom d'utilisateur | Mot de passe | Rôle           | Validité |
 | ----------------- |--------------| -------------- | -------- |
 | admin             | @dm1N#9128!  | Administrateur | actif    |
 | alice             | 4l1C3%%_x81  | Collaborateur  | actif    |
 
-La politique de mot de passe impose min. 8 caractères, min. 1 chiffre, min. 1 minuscule, min. 1 majuscule, min. 1 caractère spécial.
+:warning: **ATTENTION** : La politique de mot de passe impose min. 8 caractères, min. 1 chiffre, min. 1 minuscule, min. 1 majuscule, min. 1 caractère spécial pour former un mot de passe fort lors de la création d'un nouvel utilisateur ou la modification d'un existant.
 
 Dans le cas où le login devait échouer, un message d'information sera affiché en haut à gauche de la page.
 
@@ -170,7 +172,7 @@ Depuis là, il peut modifier, ajouter voire supprimer un utilisateur. Pour reven
 
 Lorsqu'un administrateur clique sur le bouton *Add user* en-dessous de la liste des utilisateurs existants, il arrive sur la page ci-dessous :
 
-![image-20211012202447424](figures/image-20211012202447424.png)
+![image-20220109175516741](figures/image-20220109175516741.png)
 
 Elle lui permet de renseigner un nom d'utilisateur, de paramétrer le rôle de celui-ci, de lui définir un mot de passe ainsi que d'activer ou non le compte avec la checkbox. Un message s'affichera en haut à gauche de la page pour indiquer que le compte a bien été créé.
 
@@ -209,7 +211,7 @@ Comme dans la boîte mail, il est aussi possible de répondre au message et de l
 
 ### Supprimer un mail ou un utilisateur
 
-Il est possible de supprimer un mail ou un utilisateur à l'aide des différents bouton *Delete*, cependant attention, **il n'y a aucune demande de confirmation avant suppression**.
+Il est possible de supprimer un mail ou un utilisateur à l'aide des différents boutons *Delete*, cependant attention, **il n'y a aucune demande de confirmation avant suppression**.
 
 
 
@@ -217,4 +219,4 @@ Il est possible de supprimer un mail ou un utilisateur à l'aide des différents
 
 La page de gestion de la base de données est accessible via cette URL : http://localhost:8081/phpliteadmin.php
 
-**ATTENTION** : La page est seulement accessible en entrant le mot de passe trouvable au début du fichier *phpliteadmin.php* assigné à la variable `$password`.
+:warning: **ATTENTION** : La page est seulement accessible en entrant le mot de passe trouvable à la ligne 47 du fichier *phpliteadmin.php* assigné à la variable `$password`.
