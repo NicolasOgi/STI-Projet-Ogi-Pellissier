@@ -387,12 +387,13 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   Supprimer tous les messages d'un coup en modifiant l'attribut `onclick` du bouton *Delete* d'un des mails contenus dans la boîte mail d'Alice :
 
   ```html
-  <button onclick="location.href = 'index.php?action=delete_mail&amp;no=34\' OR 1=1--'" type="button" class="btn btn-danger">Delete</button>
+  <button onclick="location.href = 'index.php?action=delete_mail&amp;no=3\' OR 1=1--'" type="button" class="btn btn-danger">Delete</button>
   ```
 
-  Ici on remplace le numéro du mail à supprimer qui était le n°3 par un numéro d'un mail qui n'existe pas (par exemple le n°34) pour que la première condition ne soit pas remplie et que le `1=1` soit évalué pour supprimer tous les mails.
 
-  
+​		Ici la condition du WHERE dans la requête SQL sera vraie et donc tous les mails de la base de données seront supprimés.
+
+
 
 - **Contrôles** :
 
@@ -407,7 +408,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   - Tampering
   - Repudiation (supprimer un message envoyé)
   - Information disclosure
-  
+
   
 
 #### 7. Brute-force de la page de login de la base de données
