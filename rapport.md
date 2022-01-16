@@ -2,7 +2,7 @@
 
 Auteurs : Nicolas Ogi, Rebecca Tevaearai
 
-Date : 09.01.2022
+Date : 16.01.2022
 
 [TOC]
 
@@ -582,6 +582,18 @@ Grâce aux *prepared statements*, les variables liées sont envoyées au serveur
 Cette contre-mesure nécessite simplement de définir un mot de passe très fort pour que le brute-force ne soit plus une option viable. Elle vient contrer le scénario d'attaque 7.
 
 Pour la mettre en place, il a simplement fallu générer un mot de passe très fort (30 caractères, des majuscules/minuscules/chiffres/caractères spéciaux) et modifier la valeur de la variable `$password` à la ligne 47 du fichier *phpliteadmin.php*.
+
+
+
+#### 10. Mettre à jour les versions de NGINX et de PHP
+
+Bien qu'aucun scénario d'attaque n'est associé à cette contre-mesure et qu'elle n'a pas été mise en place dans ce projet car hors du cadre, il serait judicieux de mettre à jour les versions de NGINX et de PHP utilisées car celles-ci comportent un nombre important de vulnérabilités.
+
+Liens détaillant les vulnérabilités des versions de NGINX et PHP :
+
+[Vulnérabilités de NGINX 1.4.6](https://www.cybersecurity-help.cz/vdb/nginx/nginx/1.4.6/)
+
+[Vulnérabilités de PHP 5.5.9](https://www.cybersecurity-help.cz/vdb/php_group/php/5.5.9/)
 
 
 

@@ -4,7 +4,7 @@ Auteurs : Nicolas Ogi, David Pellissier
 
 Modifié par : Nicolas Ogi, Rebecca Tevaearai
 
-Date : 09.01.2022
+Date : 16.01.2022
 
 
 
@@ -73,9 +73,9 @@ Date : 09.01.2022
 2. Pour créer le conteneur Docker, utilisez la commande ci-dessous dans le dossier créé précédemment par la commande `git clone` :
 
 ```bash
-   docker run -ti -v ${PWD}/site:/usr/share/nginx/ -d -p 8081:80 --name sti_project2 --hostname sti arubinst/sti:project2018
+docker run -ti -v ${PWD}/site:/usr/share/nginx/ -d -p 8081:80 --name sti_project2 --hostname sti arubinst/sti:project2018
 ```
-Elle permet de télécharger l'image de base *arubinst/sti:project2018* contenant les services nginx et php, de mapper le dossier *site* en local sur le dossier */usr/share/nginx/* dans le conteneur, de mapper le port 8081 local sur le port 80 du conteneur, de nommer le conteneur *sti_project2* ainsi que de nommer l'hôte virtuel *sti*.
+Elle permet de télécharger l'image de base *arubinst/sti:project2018* contenant les services NGINX et PHP, de mapper le dossier *site* en local sur le dossier */usr/share/nginx/* dans le conteneur, de mapper le port 8081 local sur le port 80 du conteneur, de nommer le conteneur *sti_project2* ainsi que de nommer l'hôte virtuel *sti*.
 
    Si le conteneur Docker existe déjà, vous n'avez qu'à le lancer avec la commande : `docker start sti_project2`
 
@@ -85,7 +85,7 @@ Elle permet de télécharger l'image de base *arubinst/sti:project2018* contenan
 3. Lancez les deux services depuis votre host :
 
 ```bash
-docker exec -u root sti_project2 service nginx start # NGINX
+docker exec -u root sti_project2 service nginx start    # NGINX
 docker exec -u root sti_project2 service php5-fpm start # pour PHP
 ```
 
@@ -111,7 +111,7 @@ docker exec -u root sti_project2 chown www-data /usr/share/nginx
 
 ![image-20220109174738822](figures/image-20220109174738822.png)
 
-Voici la page de login vous demandant d'entrer un nom d'utilisateur, un mot de passe et de valider le CAPTCHA. 
+Voici la page de login vous demandant d'entrer un nom d'utilisateur, un mot de passe et de "résoudre" le CAPTCHA. 
 
 Deux comptes sont déjà créés, un compte d'administrateur et un compte de collaborateur dont vous trouverez les informations de connexion ci-dessous :
 
@@ -154,7 +154,7 @@ En cliquant sur le bouton *Change password*, il est possible d'accéder aux info
 
 ![image-20211012201943656](figures/image-20211012201943656.png)
 
-Un collaborateur ne pourra que modifier son mot de passe à l'aide de la page ci-dessus. Comparé à un administrateur qui pourrait, en plus, changer son rôle et sa validité. Après changement du mot de passe, un message affiché en haut à gauche de la page de login indiquera que le mot de passe a bien été modifié et l'utilisateur sera invité à se reconnecter avec son nouveau mot de passe.
+Un collaborateur ne pourra que modifier son propre mot de passe à l'aide de la page ci-dessus. Comparé à un administrateur qui pourrait, en plus, changer son rôle et sa validité. Après changement du mot de passe, un message affiché en haut à gauche de la page de login indiquera que le mot de passe a bien été modifié et l'utilisateur sera invité à se reconnecter avec son nouveau mot de passe.
 
 
 
