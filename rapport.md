@@ -184,11 +184,8 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
   - Spoofing
-  
   - Tampering
-  
   - Repudiation (supprimer un message envoyé, depuis la boîte mail du destinataire)
-  
   - Information disclosure
   
     
@@ -216,7 +213,6 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
   - Tampering
   - Repudiation
-  
   - Information disclosure
   
     
@@ -243,13 +239,9 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   Dans ce scénario, nous pouvons identifier les menaces suivantes :
 
   - Spoofing
-  
   - Tampering
-  
   - Repudiation
-  
   - Information disclosure
-  
   - Elevation of privilege (interception d'une requête provenant d'un administrateur, détaillée plus haut)
     
 
@@ -366,7 +358,6 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   - Spoofing
   - Tampering
   - Repudiation (supprimer un message envoyé, depuis la boîte mail du destinataire)
-  
   - Information disclosure
   - Elevation of privilege
   
