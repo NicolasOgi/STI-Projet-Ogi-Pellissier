@@ -29,10 +29,10 @@ Comme l'application est exécutée au sein d'une entreprise, on estime que le r�
 - Seule la page de login doit être accessible sans être authentifié
 - Seuls les administrateurs ont le droit d'ajouter, modifier ou supprimer un utilisateur
 - Il ne doit pas être possible pour un utilisateur, peu importe son rôle, de pouvoir consulter les messages reçus d'un autre utilisateur
-- La base de données contenant les informations associées aux utilisateurs doit absolument être protégée
+- La base de données contenant les informations associées aux utilisateurs doit impérativement être protégée
 - Un utilisateur, peu importe son rôle, ne doit pas pouvoir modifier ou supprimer un message après l'avoir envoyé (non-répudiation)
 - Un utilisateur doit être défini comme "actif" pour pouvoir se connecter
-- La page de gestion de la base de données de doit être accessible que par celui ou celle qui en connaît le mot de passe
+- La page de gestion de la base de données doit être accessible que par celui ou celle qui en connaît le mot de passe
 
 ### Éléments du système
 
@@ -50,62 +50,60 @@ Comme l'application est exécutée au sein d'une entreprise, on estime que le r�
 
 ### Identification des biens
 
-- **Application Web de messagerie électronique** : Si elle venait à être attaquée, nous pourrions avoir des comptes utilisateurs usurpés afin de répandre de fausses informations aux autres utilisateurs et des désactivations ou suppressions de compte dans le cas où un compte Administrateur serait compromis. Nous avons donc une perte de confidentialité et d'intégrité.
-- **Base de données contenant les messages des utilisateurs qui se connectent à l'application Web** : Si elle devait être compromise, un attaquant pourrait récupérer tous les messages échangés entre les utilisateurs. Pire, si la page de gestion de cette DB devait l'être aussi, l'attaquant pourrait également modifier voire supprimer les messages contenus, nous avons donc, dans ce cas-là, une perte totale de confidentialité et d'intégrité. Il pourrait même supprimer la DB toute entière, ce qui rendrait l'application Web indisponible.
+- **Application Web de messagerie électronique** : Si elle venait à être attaquée, nous pourrions avoir des comptes utilisateurs usurpés afin de répandre de fausses informations aux autres utilisateurs et des désactivations ou suppressions de compte dans le cas où un compte Administrateur serait compromis. Nous avons donc une perte d'authenticité, de confidentialité et d'intégrité.
+- **Base de données contenant les messages des utilisateurs qui se connectent à l'application Web** : Si elle devait être compromise, un attaquant pourrait récupérer tous les messages échangés entre les utilisateurs. Pire, si la page de gestion de cette DB devait l'être aussi, l'attaquant pourrait également modifier voire supprimer les messages et utilisateurs contenus, nous avons donc, dans ce cas-là, une perte totale de confidentialité et d'intégrité. Il pourrait même supprimer la DB toute entière, ce qui rendrait l'application Web indisponible.
 
 
 
 ### Définition du périmètre de sécurisation
 
-Comme l'application ne serait accessible qu'en interne, le serveur sur laquelle elle s'exécute ne se situe pas dans une DMZ mais directement dans le réseau privé de l'entreprise. Ce qui veut dire que les données n'ont pas de périmètre de sécurité à franchir entre des zones de confiances différentes. Nous supposons que les fonctions d'administration doivent rester accessibles peu importe où l'on se trouve dans le réseau donc pas de limitations à certains VLAN ou plages d'IP.
+Comme l'application n'est accessible qu'en interne, le serveur sur laquelle elle s'exécute ne se situe pas dans une DMZ mais directement dans le réseau privé de l'entreprise. Ce qui veut dire que les données n'ont pas de périmètre de sécurité à franchir entre des zones de confiances différentes. Nous supposons que les fonctions d'administration doivent rester accessibles peu importe où l'on se trouve dans le réseau, il n'y a donc pas de limitations à certains VLAN ou plages d'IP.
 
 
 
 ## Identification des sources de menaces
 
-Si l'application Web ne tourne qu'en interne dans l'entreprise et n'est accessible qu'à l'intérieur de celle-ci, il est clair que les sources de menaces principales sont les employés eux-mêmes. Cependant, différentes sources de menaces venant d'un réseau externe existent mais devraient dans un premier temps être capables d'entrer à l'intérieur du réseau de l'entreprise et éventuellement compromettre la machine d'un employé avant de pouvoir attaquer l'application Web, ce qui fait que leurs potentialités est plus faibles.
+Si l'application Web ne tourne qu'en interne dans l'entreprise et n'est accessible qu'à l'intérieur de celle-ci, il est clair que les sources de menaces principales sont les employés eux-mêmes. Cependant, différentes sources de menaces venant d'un réseau externe existent mais devraient dans un premier temps être capables d'entrer à l'intérieur du réseau de l'entreprise et éventuellement compromettre la machine d'un employé avant de pouvoir attaquer l'application Web, ce qui fait que leur potentialité est plus faible.
 
 
 
 **Employé mécontent** :
 
-- Motivation : Revanche, sabotage, divulgation d'informations sensibles sur l'entreprise, modification d'informations
-- Cible : Base de données contenant les noms des utilisateurs et leurs messages (en y accédant directement ou via les mailboxes des autres employés)
-- Potentialité : moyenne
+- **Motivation** : Revanche, sabotage, divulgation d'informations sensibles sur l'entreprise, modification d'informations
+- **Cible** : Base de données contenant les noms des utilisateurs et leurs messages (en y accédant directement ou via les mailboxes des autres employés)
+- **Potentialité** : moyenne
 
 
 
 **Employé malin ou curieux** :
 
-- Motivation : Espionner les messages des autres employés, obtenir des droits supplémentaires, faire une blague
-- Cible : Base de données contenant les noms des utilisateurs et leurs messages (en y accédant directement ou via les mailboxes des autres employés), Page de gestion des administrateurs
-- Potentialité : moyenne
+- **Motivation** : Espionner les messages des autres employés, obtenir des droits supplémentaires, faire une blague
+- **Cible** : Base de données contenant les noms des utilisateurs et leurs messages (en y accédant directement ou via les mailboxes des autres employés), Page de gestion des administrateurs
+- **Potentialité** : moyenne
 
 
 
 **Hackers, script-kiddies** :
 
-- Motivation : S'amuser, gloire
-- Cible : N'importe quel élément / actif
-- Potentialité : faible
+- **Motivation** : S'amuser à trouver des failles dans l'application, gloire d'avoir réussi à percer les défenses
+- **Cible** : N'importe quel élément / actif
+- **Potentialité** : faible
 
 
 
-**Cybercrime (spam, maliciels)** :
+**Cybercrime (spam, malwares)** :
 
-- Motivation : Financières
-
-- Cible : Vol de credentials des employés, spam des employés, modification d'informations, phishing, revente d'informations
-
-- Potentialité : faible
+- **Motivation** : Financière (revente d'informations confidentielles appartenenant à l'entreprise, installation d'un ransomware)
+- **Cible** : Vol de credentials des employés (phishing), spam des employés, modification d'informations, revente d'informations
+- **Potentialité** : faible
 
   
 
 **Concurrent** :
 
-- Motivation : Espionnage industriel
-- Cible : Messages échangés entre les employés
-- Potentialité : faible
+- **Motivation** : Espionnage industriel, sabotage
+- **Cible** : Messages échangés entre les employés contenant potentiellement des informations confidentielles sur la production ou autre (accessibles par la base de données ou les mailboxes des employés)
+- **Potentialité** : faible
 
 
 
@@ -113,7 +111,7 @@ Si l'application Web ne tourne qu'en interne dans l'entreprise et n'est accessib
 
 ### Éléments du système attaqué
 
-Les éléments cibles principaux sont les biens identifiés plus haut dans le document, la base de données contenant les informations des utilisateurs et leurs messages ainsi que l'application Web elle-mêmes.
+Les éléments cibles principaux sont les biens identifiés plus haut dans le document : la base de données contenant les informations des utilisateurs et leurs messages ainsi que l'application Web elle-même.
 
 
 
@@ -141,9 +139,11 @@ Les motivations ont été divisées en deux parties selon la cible.
 
 Les scénarios d'attaque listés ci-dessous sont basés sur les vulnérabilités identifiées lors de tests sur l'application Web. 
 
-Comme l'application Web n'est accessible que depuis le réseau interne de l'entreprise, les sources de menace les plus probables sont surtout les personnes ayant accès au réseau interne et donc les employés eux-mêmes, c'est pour cela que ce sont les seules sources de menaces listés dans les différents scénarios d'attaque. Il est clair que des hackers, script-kiddies, le cybercrime voire des concurrents pourraient également faire partie des sources de menace mais la probabilité est plus faibles car ils devraient d'abord percer les défenses de l'entreprise afin de se retrouver dans le réseau interne de celle-ci.
+Comme l'application Web n'est accessible que depuis le réseau interne de l'entreprise, les sources de menace les plus probables sont surtout les personnes ayant accès au réseau interne et donc les employés eux-mêmes, c'est pour cela que ce sont les seules sources de menaces listés dans les différents scénarios d'attaque. Il est clair que des hackers, script-kiddies, le cybercrime voire des concurrents pourraient également faire partie des sources de menace mais la probabilité est plus faible car ils devraient d'abord percer les défenses de l'entreprise afin de se retrouver dans le réseau interne de celle-ci.
 
-#### 1. Brute-forcer le système d'autentification afin d'avoir accès à la mailbox d'un employé 
+
+
+#### 1. Brute-force du système d'autentification afin d'avoir accès à la mailbox d'un employé 
 
 - **Impact sur l'entreprise** : élevé (perte de confidentialité, d'intégrité et d'authenticité)
 
@@ -176,6 +176,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   - Limiter le nombre de tentatives infructueuses avant de désactiver le compte mais **attention** un attaquant pourrait profiter de cette contre-mesure pour bloquer les comptes des employés, ce qui ferait perdre du temps à l'entreprise pour réactiver les comptes
   - Limiter le débit des tentatives après un certains nombres de tentatives infructueuses (avec un CAPTCHA par ex.)
   - Bloquer l'IP de la source après plusieurs tentatives infructueuses
+  - Mettre en place un système de double authentification via un SMS ou un mail envoyé à l'utilisateur possédant le compte
   - Modifier le flux du login pour garder un temps constant afin d'éviter les timing attacks
   
 - **STRIDE** :
@@ -192,7 +193,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   
     
 
-#### 2. Contourner le système d'autorisation afin d'effectuer des actions sur les messages des autres employés
+#### 2. Contournement du système d'autorisation afin d'effectuer des actions sur les messages des autres employés
 
 - **Impact sur l'entreprise** : moyen (perte de confidentialité, perte d'intégrité)
 
@@ -232,7 +233,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
 - **Scénario d'attaque** :
   
-  Comme l'application Web utilise HTTP pour échanger les données entre le client et le serveur, il est tout à fait possible de sniffer le réseau afin de récupérer les credentials d'un employé ou récupérer des messages envoyés à un autre employé. Un attaquant pourrait récupérer les credentials d'un administrateur, usurper son identité, accéder aux fonctionnalités supplémentaires (gestion admin). De manière plus active, il pourrait à l'aide d'un proxy d'interception, modifier la requête envoyée au serveur afin de porter atteinte à l'intégrité d'un message envoyé à un autre employé (en modifiant l'expéditeur d'un message par ex.).
+  Comme l'application Web utilise HTTP pour échanger les données entre un client et le serveur, il est tout à fait possible de sniffer le réseau afin de récupérer les credentials d'un employé ou récupérer des messages envoyés à un autre employé. Un attaquant pourrait récupérer les credentials d'un administrateur, usurper son identité et accéder aux fonctionnalités supplémentaires (gestion admin). De manière plus active, il pourrait à l'aide d'un proxy d'interception, modifier la requête envoyée au serveur afin de porter atteinte à l'intégrité d'un message envoyé à un autre employé (en modifiant l'expéditeur ou le corps d'un message par ex.). Comme un administrateur a la possiblité de modifier le rôle d'un collaborateur (le passer administrateur), l'attaquant pourrait faire en sorte de demander à un administrateur de modifier son mot de passe, intercepter la requête envoyée au serveur, modifier la valeur définissant le rôle afin de devenir administrateur également.
   
 - **Contrôles** :
   - Bien que cette contre-mesure ne sera pas mise en place dans le cadre de ce projet, la solution la plus efficace à ce problème de sécurité est de passer le serveur en HTTPS afin que tous les messages échangés soient chiffrés pour ainsi assurer la confidentialité, l'intégrité et l'authenticité
@@ -249,6 +250,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   
   - Information disclosure
   
+  - Elevation of privilege (interception d'une requête provenant d'un administrateur, détaillée plus haut)
     
 
 #### 4. Attaque Cross-Site Scripting
@@ -290,7 +292,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 - **Contrôles** :
 
   - Assainir les inputs utilisateur pour éviter que des balises HTML soient interprétables
-  - Passer le cookie *PHPSESSID* en *httpOnly* pour empêcher sa récupération via `document.cookie` 
+  - Passer le cookie *PHPSESSID* en *HttpOnly* pour empêcher sa récupération via `document.cookie` 
 
   
 
@@ -330,7 +332,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
     });
     ```
 
-  - Un employé malicieux pourrait également voler le compte d'un administrateur (ou utilisateur) en le forçant à changer de mot de passe involontairement pour pouvoir ensuite se connecter à son compte avec ce nouveau mot de passe défini.
+  - Un employé malicieux pourrait également voler le compte d'un administrateur (ou d'un collaborateur) en le forçant à changer de mot de passe involontairement pour pouvoir ensuite se connecter à son compte avec ce nouveau mot de passe défini.
 
     Exemple de site malicieux :
 
@@ -353,7 +355,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
 - **Contrôles** :
 
-  - Utiliser des tokens anti-CSRF dans les formulaires
+  - Utiliser des tokens anti-CSRF dans les formulaires et sur les boutons effectuant des actions importantes (supprimer un message ou un utilisateur par ex.)
 
   
 
@@ -372,7 +374,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
  #### 6. Injection SQL
 
-- **Impact sur l'entreprise** : moyen (perte de confidentialité, perte d'intégrité)
+- **Impact sur l'entreprise** : moyen (perte de confidentialité et d'intégrité)
 
 - **Sources de la menace** :  employé mécontent ou curieux
 
@@ -391,13 +393,13 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
   ```
 
 
-​		Ici la condition du WHERE dans la requête SQL sera vraie et donc tous les mails de la base de données seront supprimés.
+  Ici la condition du WHERE dans la requête SQL sera vraie et donc tous les mails de la base de données seront supprimés.
 
 
 
 - **Contrôles** :
 
-  - Utiliser des prepare statements pour éviter les injections SQL dans les requêtes légitimes
+  - Utiliser des *prepared statements* pour éviter les injections SQL dans les requêtes légitimes
 
   
 
@@ -453,7 +455,7 @@ Dans cette partie du rapport, nous listons les contre-mesures mises en place dan
 
 Cette contre-mesure permet de renforcer les mots de passe et ainsi éviter qu'ils soient trop facilement cassables.
 
-Pour faire cela, une nouvelle fonction PHP a été créée dans le fichier *controller/users.php* permettant de vérifier que le mot de passe entré lors de la création ou la modification d'un compte utilisateur respecte bien la politique de mot de passe suivante :
+Pour faire cela, une nouvelle fonction PHP a été créée dans le fichier *controller/users.php* permettant de vérifier que le mot de passe entré lors de la création ou la modification d'un compte utilisateur respecte bien la politique de mot de passe suivante définie par cette regex :
 
 Min. 8 caractères, min. 1 chiffre,  min. 1 majuscule, min. 1 minuscule, min. 1 caractère spécial
 
@@ -502,7 +504,7 @@ function show_msg_details() {
         require('view/details.php');
     }
     else { // sinon une exception est lancée
-        throw new Exception('You do not have the rights to access this message');
+        throw new Exception(ERROR_ACCESS_MESSAGE);
     }
 }
 ?>
@@ -600,6 +602,6 @@ Il a été intéressant de faire ce projet en deux parties, d'abord réaliser un
 
 Les difficultés rencontrées lors de ce projet ont été les suivantes :
 
-- Mettre en place un DFD compréhensible afin de rendre claire la description du sytème
+- Mettre en place un DFD compréhensible afin de rendre claire la description du système
 - Identifier et tester des attaques pertinentes sur l'application Web
 - Mettre en place de manière correcte un token anti-CSRF
