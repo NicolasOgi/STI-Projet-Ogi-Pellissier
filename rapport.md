@@ -2,7 +2,7 @@
 
 Auteurs : Nicolas Ogi, Rebecca Tevaearai
 
-Date : 16.01.2022
+Date : 18.01.2022
 
 [TOC]
 
@@ -406,7 +406,7 @@ Comme l'application Web n'est accessible que depuis le réseau interne de l'entr
 
 #### 7. Brute-force de la page de login de la base de données
 
-- **Impact sur l'entreprise** : élevé (perte de confidentialité, d'intégrité et d'authenticité)
+- **Impact sur l'entreprise** : très élevé (perte de confidentialité, d'intégrité, d'authenticité et de disponibilité)
 
 - **Sources de la menace** : employé mécontent ou malin
 
