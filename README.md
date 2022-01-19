@@ -122,7 +122,7 @@ Deux comptes sont déjà créés, un compte d'administrateur et un compte de col
 
 :warning: **ATTENTION** : La politique de mot de passe impose min. 8 caractères, min. 1 chiffre, min. 1 minuscule, min. 1 majuscule, min. 1 caractère spécial pour former un mot de passe fort lors de la création d'un nouvel utilisateur ou la modification d'un existant.
 
-Dans le cas où le login devait échouer, un message d'information sera affiché en haut à gauche de la page.
+Dans le cas où le login devait échouer, un message d'information sera affiché en-dessous du CAPTCHA.
 
 
 
