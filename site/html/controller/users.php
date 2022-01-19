@@ -87,13 +87,21 @@ function change_user_details() {
     if($_SESSION['role'] == ROLE_ADMIN && isset($_POST['role'])) {
 
         if (verifyCSRFToken($_POST['csrf_token'])) {
-
             // appel de la fonction permettant de mettre à jour les données dans la DB
             updateUserNonEmptyFields($userNo);
 
-            // Si un administrateur veut passer son rôle à Collaborateur, il doit se reconnecter
-            if ($userNo == $_SESSION['no'] && $_POST['role'] == ROLE_USER) {
-                $_SESSION['message'] = ROLE_UPDATED;
+            // si un administrateur veut modifier son propre rôle (passer à Collaborateur) ou s'il veut désactiver son
+            // propre compte, il sera déconnecté
+            if ($userNo == $_SESSION['no']) {
+
+                if ($_POST['role'] == ROLE_USER) {
+                    $_SESSION['message'] = ROLE_UPDATED;
+                }
+
+                if (!isset($_POST['valid'])) {
+                    $_SESSION['message'] = USER_DISABLED;
+                }
+
                 @header("location: index.php?action=logout&csrf_token=". $_POST['csrf_token']);
                 exit();
             }

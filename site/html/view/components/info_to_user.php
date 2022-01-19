@@ -15,6 +15,7 @@ function display_alert() {
             case USER_DELETED:
             case MESSAGE_DELETED:
             case ROLE_UPDATED:
+            case USER_DISABLED:
                 $alert = "alert-success";
                 break;
             default:
