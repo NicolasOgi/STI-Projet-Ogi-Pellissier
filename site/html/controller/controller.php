@@ -1,16 +1,17 @@
 <?php
     // Le rôle d'administrateur est défini par un 1 dans la DB alors que le rôle de collaborateur est défini par un 0
-    const ROLE_USER = '0';
+    const ROLE_USER  = '0';
     const ROLE_ADMIN = '1';
 
     // page
-    const ERROR_ACCESS_PAGE = "You do not have the rights to access this page";
+    const EXCEPTION_ACCESS_PAGE = "You do not have the rights to access this page";
 
     // message
-    const ERROR_ACCESS_MESSAGE = "You do not have the rights to access this message";
-    const ERROR_DELETE_MESSAGE = "You do not have the rights to delete this message";
-    const ERROR_REPLY_MESSAGE  = "You do not have the rights to reply to this message";
-    const MESSAGE_SENT         = "The message has been sent";
+    const EXCEPTION_ACCESS_MESSAGE = "You do not have the rights to access this message";
+    const EXCEPTION_DELETE_MESSAGE = "You do not have the rights to delete this message";
+    const EXCEPTION_REPLY_MESSAGE  = "You do not have the rights to reply to this message";
+    const MESSAGE_SENT             = "The message has been sent";
+    const MESSAGE_DELETED          = "The message has been deleted";
 
     // login
     const ERROR_USER_DISABLED = "This user is disabled";
@@ -20,12 +21,14 @@
     const ERROR_CSRF_TOKEN = "The anti-CSRF token couldn't be verified";
 
     // user
-    const ERROR_USER_NOT_EXIST = "The user does not exist";
-    const ERROR_MODIFY_USER    = "You do not have the rights to modify this user";
-    const ERROR_CREATE_USER    = "The user couldn't be created";
-    const USER_MODIFIED        = "The user has been modified";
-    const USER_CREATED         = "The user has been created";
-    const ERROR_DELETE_ONESELF = "You cannot delete yourself";
+    const ERROR_USER_NOT_EXIST  = "The user does not exist";
+    const EXCEPTION_MODIFY_USER = "You do not have the rights to modify this user";
+    const ERROR_CREATE_USER     = "The user couldn't be created";
+    const USER_MODIFIED         = "The user has been modified";
+    const USER_CREATED          = "The user has been created";
+    const USER_DELETED          = "The user has been deleted";
+    const ERROR_DELETE_ONESELF  = "You cannot delete yourself";
+    const USER_LOGGED_OUT       = "Successfully disconnected";
 
     // password
     const PASSWORD_UPDATED                 = "Your password has been updated. Please log in again";

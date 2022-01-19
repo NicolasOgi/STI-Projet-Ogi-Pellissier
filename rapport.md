@@ -495,7 +495,7 @@ function show_msg_details() {
         require('view/details.php');
     }
     else { // sinon une exception est lancée
-        throw new Exception(ERROR_ACCESS_MESSAGE);
+        throw new Exception(EXCEPTION_ACCESS_MESSAGE);
     }
 }
 ?>

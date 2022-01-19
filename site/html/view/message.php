@@ -41,6 +41,7 @@
 
                             <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>"/>
 
+                            <?php display_alert() ?>
                             <div class="d-grid">
                                 <button class="btn btn-primary btn-lg" id="submitButton" type="submit">Send</button>
                             </div>

@@ -15,7 +15,7 @@ function check_if_connected() {
 function administration() {
     // si l'utilisateur n'est pas un administrateur
     if($_SESSION['role'] != ROLE_ADMIN){
-        throw new Exception(ERROR_ACCESS_PAGE);
+        throw new Exception(EXCEPTION_ACCESS_PAGE);
     }
 
     // récupération des utilisateurs dans la DB afin qu'ils soient affichés dans la vue grâce à la variable $users
@@ -34,7 +34,7 @@ function change_user_details() {
 
     // si l'utilisateur n'est pas admin et qu'il essaie de modifier un autre utilisateur que lui-même
     if($_SESSION['role'] != ROLE_ADMIN && $userNo != $_SESSION['no']){
-        throw new Exception(ERROR_MODIFY_USER);
+        throw new Exception(EXCEPTION_MODIFY_USER);
     }
 
     if (empty($_POST)){
@@ -108,7 +108,7 @@ function add_user(){
 
     // si l'utilisateur n'est pas un administrateur
     if($_SESSION['role'] != ROLE_ADMIN){
-        throw new Exception(ERROR_ACCESS_PAGE);
+        throw new Exception(EXCEPTION_ACCESS_PAGE);
     }
 
     // si ce n'est pas null alors l'utilisateur existe déjà et c'est donc une modification
@@ -151,7 +151,7 @@ function delete_user(){
 
     // si l'utilisateur n'est pas un administrateur
     if($_SESSION['role'] != ROLE_ADMIN){
-        throw new Exception(ERROR_ACCESS_PAGE);
+        throw new Exception(EXCEPTION_ACCESS_PAGE);
     }
 
     // vérification du token anti-CSRF à la suppression d'un utilisateur
@@ -166,6 +166,7 @@ function delete_user(){
             if($userNo != $_SESSION['no']){
                 // appel de la fonction supprimant l'utilisateur de la DB
                 dropUser($userNo);
+                $_SESSION['message'] = USER_DELETED;
             }
             else {
                 $_SESSION['message'] = ERROR_DELETE_ONESELF;
@@ -188,6 +189,6 @@ function delete_user(){
  */
 function password_matches_security_policy($password) {
     // min. 8 caractères, min. 1 chiffre,  min. 1 majuscule, min. 1 minuscule, min. 1 caractère spécial selon la liste
-    return preg_match("/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[0-9A-Za-z!?()<>+&=~^¦|¬;,.:_@#€£$%]{8,}$/", $password);
+    return preg_match("/^(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])(?=\S*[\W])\S*$/", $password);
 }
 ?>

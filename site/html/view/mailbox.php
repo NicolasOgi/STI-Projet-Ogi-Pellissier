@@ -13,6 +13,7 @@
     <?php require 'view/components/sidebar.php' ?>
     <div class="table-responsive">
         <h1><?php echo htmlspecialchars($_SESSION['username']) ?></h1>
+        <?php display_alert() ?>
         <table class="table">
             <thead>
                 <tr>

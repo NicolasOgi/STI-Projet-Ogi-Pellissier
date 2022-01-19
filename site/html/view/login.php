@@ -30,6 +30,7 @@
                                 </div>
                                 <div class="g-recaptcha" data-sitekey="6Le6JdQdAAAAALieOR5e8PGiZthlVSS9qCMklpp2"></div>
                                 <br>
+                                <?php display_alert() ?>
                                 <div class="d-grid">
                                     <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit">Sign in</button>
                                 </div>

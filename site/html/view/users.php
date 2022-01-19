@@ -16,6 +16,7 @@
                 <span class="fa fa-users fa-2x principal-title"></span>
                 Users
             </h3>
+            <?php display_alert() ?>
         </div>
         <table class="table">
             <thead>

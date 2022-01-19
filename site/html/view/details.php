@@ -48,6 +48,7 @@
                             <div class="d-grid">
                                 <button onclick="location.href = 'index.php?action=delete_mail&no=<?php echo $mail['no']?>&csrf_token=<?php echo $_SESSION['csrf_token']?>'" type="button" class="btn btn-danger">Delete</button>
                             </div>
+                            <?php display_alert() ?>
                         </form>
                     </div>
                 </div>

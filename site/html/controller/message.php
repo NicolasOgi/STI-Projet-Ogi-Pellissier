@@ -45,7 +45,7 @@ function new_msg(){
 
             // une exception est lancée si l'utilisateur connecté n'est pas le destinataire du message
             if ($mail['recipient'] != $_SESSION["no"]) {
-                throw new Exception(ERROR_REPLY_MESSAGE);
+                throw new Exception(EXCEPTION_REPLY_MESSAGE);
             }
         }
         require 'view/message.php';
@@ -66,10 +66,11 @@ function delete_msg(){
         if ($mail['recipient'] == $_SESSION["no"]) {
             // appel à la fonction présente dans le model
             deleteMail($_GET['no']);
+            $_SESSION['message'] = MESSAGE_DELETED;
             mailbox();
         }
         else { // sinon une exception est lancée
-            throw new Exception(ERROR_DELETE_MESSAGE);
+            throw new Exception(EXCEPTION_DELETE_MESSAGE);
         }
     }
     else {
