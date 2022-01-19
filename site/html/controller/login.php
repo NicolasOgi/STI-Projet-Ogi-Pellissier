@@ -64,7 +64,10 @@ function logout() {
     // Vérification du token anti-CSRF lors d'une déconnexion de l'utilisateur
     if (verifyCSRFToken($_GET['csrf_token'])) {
         session_destroy();
-        $_SESSION['message'] = USER_LOGGED_OUT;
+        // s'il s'agit d'une déconnexion simple (par le bouton Disconnect)
+        if ($_SESSION['message'] != PASSWORD_UPDATED && $_SESSION['message'] != ROLE_UPDATED) {
+            $_SESSION['message'] = USER_LOGGED_OUT;
+        }
         require 'view/login.php';
     }
     else {

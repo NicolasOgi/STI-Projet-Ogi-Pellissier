@@ -29,6 +29,7 @@
     const USER_DELETED          = "The user has been deleted";
     const ERROR_DELETE_ONESELF  = "You cannot delete yourself";
     const USER_LOGGED_OUT       = "Successfully disconnected";
+    const ROLE_UPDATED          = "Your role has been updated. Please log in again";
 
     // password
     const PASSWORD_UPDATED                 = "Your password has been updated. Please log in again";

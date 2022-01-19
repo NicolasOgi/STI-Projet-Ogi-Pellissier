@@ -14,6 +14,7 @@ function display_alert() {
             case USER_LOGGED_OUT:
             case USER_DELETED:
             case MESSAGE_DELETED:
+            case ROLE_UPDATED:
                 $alert = "alert-success";
                 break;
             default:

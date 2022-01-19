@@ -90,8 +90,17 @@ function change_user_details() {
 
             // appel de la fonction permettant de mettre à jour les données dans la DB
             updateUserNonEmptyFields($userNo);
-            $_SESSION['message'] = USER_MODIFIED;
-            administration();
+
+            // Si un administrateur veut passer son rôle à Collaborateur, il doit se reconnecter
+            if ($userNo == $_SESSION['no'] && $_POST['role'] == ROLE_USER) {
+                $_SESSION['message'] = ROLE_UPDATED;
+                @header("location: index.php?action=logout&csrf_token=". $_POST['csrf_token']);
+                exit();
+            }
+            else {
+                $_SESSION['message'] = USER_MODIFIED;
+                administration();
+            }
         }
         else {
             $_SESSION['message'] = ERROR_CSRF_TOKEN;
